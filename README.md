@@ -25,6 +25,18 @@ python app.py
 http://127.0.0.1:5000
 ```
 
+公网监听示例：
+
+```bash
+python app.py --host 0.0.0.0 --port 8080
+```
+
+也支持环境变量：
+
+```bash
+HOST=0.0.0.0 PORT=8080 python app.py
+```
+
 ## 数据与排盘
 
 - 开奖数据来自中彩网页面使用的 JSONP 接口，程序本地缓存 30 分钟。

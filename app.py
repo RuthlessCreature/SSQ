@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import math
+import os
 import random
 import re
 import statistics
@@ -1435,4 +1437,14 @@ def index():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=5000, debug=True)
+    parser = argparse.ArgumentParser(description="双色球玄数双模选号 Web 服务")
+    parser.add_argument("--host", default=os.getenv("HOST", "127.0.0.1"), help="监听地址")
+    parser.add_argument("--port", type=int, default=int(os.getenv("PORT", "5000")), help="监听端口")
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        default=os.getenv("DEBUG", "").lower() in {"1", "true", "yes", "on"},
+        help="开启 Flask 调试模式",
+    )
+    args = parser.parse_args()
+    app.run(host=args.host, port=args.port, debug=args.debug)
