@@ -147,6 +147,31 @@ class BacktestResult:
     blue_hit_rate: float
     best_prize_counts: Dict[str, int]
     top_iterations: List[Dict[str, object]]
+    tune_score: float = 0.0
+    validate_score: float = 0.0
+    volatility: float = 0.0
+    max_miss_streak: int = 0
+    small_prize_rate: float = 0.0
+    mode_label: str = "stats_only"
+
+
+@dataclass
+class TicketEvaluation:
+    red_hits: int
+    blue_hit: bool
+    rank: str
+    utility: float
+
+
+@dataclass
+class PortfolioEvaluation:
+    ticket_count: int
+    total_utility: float
+    net_utility: float
+    best_rank: str
+    red_coverage: float
+    blue_hits: int
+    overlap_penalty: float
 
 
 def clamp_int(value: str, default: int, minimum: int, maximum: int) -> int:
@@ -529,6 +554,7 @@ def build_stats(draws: Sequence[Draw], decay: float) -> Dict[str, object]:
         )
 
     sums = [sum(draw.reds) for draw in draws] or [102]
+    spans = [max(draw.reds) - min(draw.reds) for draw in draws] or [26]
     odd_counts = [sum(1 for red in draw.reds if red % 2) for draw in draws] or [3]
     zone_counts = [
         (
@@ -550,6 +576,8 @@ def build_stats(draws: Sequence[Draw], decay: float) -> Dict[str, object]:
         "pair_freq": pair_freq,
         "avg_sum": statistics.mean(sums),
         "std_sum": statistics.pstdev(sums) or 18.0,
+        "avg_span": statistics.mean(spans),
+        "std_span": statistics.pstdev(spans) or 6.0,
         "avg_odd": statistics.mean(odd_counts),
         "avg_zone": tuple(statistics.mean(values) for values in zip(*zone_counts)),
         "latest_reds": set(draws[0].reds) if draws else set(),
@@ -558,24 +586,30 @@ def build_stats(draws: Sequence[Draw], decay: float) -> Dict[str, object]:
     }
 
 
-def mystic_score(number: int, profile: BaziProfile, blue: bool = False) -> float:
+def mystic_adjustment(number: int, profile: BaziProfile, cap: float, blue: bool = False) -> float:
+    raw = 0.0
     element = number_element(number)
-    score = 0.35
     if element in profile.useful_elements:
-        score += 0.42
+        raw += 0.55
+    if element in profile.avoid_elements:
+        raw -= 0.40
     if element == profile.day_element:
-        score += 0.12
+        raw += 0.12
     if blue and number in profile.lucky_blues:
-        score += 0.28
-    if not blue and number in profile.lucky_reds:
-        score += 0.24
-    if number % 2 == (0 if profile.gender == "女" else 1):
-        score += 0.04
-    return min(score, 1.25)
+        raw += 0.28
+    if (not blue) and number in profile.lucky_reds:
+        raw += 0.18
+    scaled = math.tanh(raw) * cap
+    return scaled
 
 
-def build_number_scores(draws: Sequence[Draw], profile: BaziProfile, config: Dict[str, float]) -> Dict[str, object]:
-    stats = build_stats(draws, float(config["decay"]))
+def build_number_scores(
+    draws: Sequence[Draw],
+    profile: BaziProfile,
+    config: Dict[str, float],
+    stats: Dict[str, object] | None = None,
+) -> Dict[str, object]:
+    stats = stats if stats is not None else build_stats(draws, float(config["decay"]))
     red_keys = list(range(1, 34))
     blue_keys = list(range(1, 17))
     red_freq = normalize(stats["red_freq"], red_keys)
@@ -584,6 +618,8 @@ def build_number_scores(draws: Sequence[Draw], profile: BaziProfile, config: Dic
     blue_freq = normalize(stats["blue_freq"], blue_keys)
     blue_recent = normalize(stats["blue_recent"], blue_keys)
     blue_omission = normalize({k: math.log1p(v) for k, v in stats["blue_omission"].items()}, blue_keys)
+    mystic_cap = float(config.get("mystic_cap", 0.0))
+    use_mystic = config.get("mode_label") == "stats_plus_mystic"
 
     red_scores = {}
     red_details = {}
@@ -593,16 +629,14 @@ def build_number_scores(draws: Sequence[Draw], profile: BaziProfile, config: Dic
             + 0.34 * red_recent[number]
             + float(config["omission_weight"]) * red_omission[number]
         )
-        mystic = mystic_score(number, profile)
-        red_scores[number] = max(
-            0.01,
-            float(config["math_weight"]) * math_score + float(config["mystic_weight"]) * mystic,
-        )
+        adjust = mystic_adjustment(number, profile, mystic_cap) if use_mystic else 0.0
+        red_scores[number] = max(0.01, math_score * (1.0 + adjust))
         red_details[number] = {
             "freq": red_freq[number],
             "recent": red_recent[number],
             "omission": red_omission[number],
-            "mystic": mystic,
+            "math_score": math_score,
+            "mystic_adjust": adjust,
             "element": number_element(number),
         }
 
@@ -614,16 +648,14 @@ def build_number_scores(draws: Sequence[Draw], profile: BaziProfile, config: Dic
             + 0.34 * blue_recent[number]
             + float(config["omission_weight"]) * blue_omission[number]
         )
-        mystic = mystic_score(number, profile, blue=True)
-        blue_scores[number] = max(
-            0.01,
-            float(config["math_weight"]) * math_score + float(config["mystic_weight"]) * mystic,
-        )
+        adjust = mystic_adjustment(number, profile, mystic_cap, blue=True) if use_mystic else 0.0
+        blue_scores[number] = max(0.01, math_score * (1.0 + adjust))
         blue_details[number] = {
             "freq": blue_freq[number],
             "recent": blue_recent[number],
             "omission": blue_omission[number],
-            "mystic": mystic,
+            "math_score": math_score,
+            "mystic_adjust": adjust,
             "element": number_element(number),
         }
 
@@ -672,6 +704,7 @@ def combo_score(
     pair_total = sum(stats["pair_freq"].get(tuple(sorted(pair)), 0.0) for pair in combinations(reds, 2))
     pair_score = pair_total / (float(stats["max_pair"]) * 15.0)
     sum_score = closeness(sum(reds), float(stats["avg_sum"]), float(stats["std_sum"]) * 1.65)
+    span_score = closeness(max(reds) - min(reds), float(stats["avg_span"]), float(stats["std_span"]) * 1.65)
     odd_score = closeness(sum(1 for red in reds if red % 2), float(stats["avg_odd"]), 2.2)
     zones = (
         sum(1 for red in reds if red <= 11),
@@ -682,12 +715,15 @@ def combo_score(
         1.0,
         sum(abs(zones[index] - stats["avg_zone"][index]) for index in range(3)) / 6.0,
     )
-    repeat_penalty = max(0, len(set(reds) & stats["latest_reds"]) - 2) * 0.18
+    consecutive_pairs = sum(1 for left, right in zip(reds, reds[1:]) if right == left + 1)
+    consecutive_penalty = max(0, consecutive_pairs - 1) * 0.16
+    recent_overlap_penalty = max(0, len(set(reds) & stats["latest_reds"]) - 2) * 0.20
     return (
         base
         + float(config["pair_weight"]) * pair_score
-        + float(config["distribution_weight"]) * (sum_score + odd_score + zone_score)
-        - repeat_penalty
+        + float(config["distribution_weight"]) * (sum_score + span_score + odd_score + zone_score)
+        - consecutive_penalty
+        - recent_overlap_penalty
     )
 
 
@@ -709,16 +745,32 @@ def explain_ticket(
     )
     reasons = [
         f"数学侧：红球 {fmt_numbers(hot_reds)} 在近200期频率/近期权重较靠前，{fmt_numbers(omitted_reds)} 兼顾遗漏回补。",
-        f"玄学侧：日主 {profile.day_master}{profile.day_element}，取 {'、'.join(profile.useful_elements)} 为喜用；红球 {fmt_numbers(useful_matches) or '无'} 五行贴合。",
+        f"玄学侧：日主 {profile.day_master}{profile.day_element}，取 {'、'.join(profile.useful_elements)} 为喜用；玄学只做小幅偏置修正，红球 {fmt_numbers(useful_matches) or '无'} 五行贴合。",
         f"结构侧：和值 {sum(ticket.reds)}、奇偶 {sum(n % 2 for n in ticket.reds)}:{6 - sum(n % 2 for n in ticket.reds)}、三区 {zones[0]}-{zones[1]}-{zones[2]}，贴近历史分布。",
         f"蓝球 {ticket.blue_text} 属{blue_details[ticket.blue]['element']}，同时结合蓝球热度、遗漏和八字映射得分，并避开本注红球数字重复。",
-        f"参数侧：回测选中数学权重 {config['math_weight']:.2f} / 玄学权重 {config['mystic_weight']:.2f}，衰减 {config['decay']:.3f}。",
+        f"参数侧：回测选中模式 {config['mode_label']}，玄学偏置上限 {config['mystic_cap']:.2f}，衰减 {config['decay']:.3f}。",
     ]
     return reasons
 
 
 def fmt_numbers(numbers: Sequence[int]) -> str:
     return "、".join(f"{number:02d}" for number in numbers)
+
+
+def candidate_pool(scores: Dict[int, float], limit: int) -> List[int]:
+    return sorted(scores, key=scores.get, reverse=True)[:limit]
+
+
+def candidate_combos(numbers: Sequence[int], size: int) -> List[Tuple[int, ...]]:
+    return [tuple(combo) for combo in combinations(numbers, size)]
+
+
+def diversification_penalty(ticket: Ticket, selected: Sequence[Ticket], diversity_weight: float) -> float:
+    if not selected:
+        return 0.0
+    overlap = sum(max(0, len(set(ticket.reds) & set(existing.reds)) - 3) for existing in selected)
+    same_blue = sum(1 for existing in selected if existing.blue == ticket.blue)
+    return diversity_weight * (overlap + same_blue * 0.6)
 
 
 def generate_tickets(
@@ -729,64 +781,50 @@ def generate_tickets(
     seed_context: str,
     include_reasons: bool = True,
     quick: bool = False,
+    number_model: Dict[str, object] | None = None,
 ) -> List[Ticket]:
-    number_model = build_number_scores(draws, profile, config)
+    if number_model is None:
+        number_model = build_number_scores(draws, profile, config)
     red_scores = number_model["red_scores"]
     blue_scores = number_model["blue_scores"]
     historical_keys = number_model["stats"]["historical_keys"]
-    rng = random.Random(stable_seed(seed_context, profile.birth_dt.isoformat(), profile.gender, config))
-    attempts = max(count * (22 if quick else 55), 180 if quick else 650)
     candidates: Dict[Tuple[Tuple[int, ...], int], Ticket] = {}
 
-    ranked_reds = sorted(red_scores, key=red_scores.get, reverse=True)
-    ranked_blues = sorted(blue_scores, key=blue_scores.get, reverse=True)
-    seed_sets = [tuple(sorted(ranked_reds[offset : offset + 6])) for offset in range(0, min(8, len(ranked_reds) - 5))]
+    red_pool_size = 8 if quick else 14
+    blue_pool_size = 3 if quick else 6
+    red_pool = candidate_pool(red_scores, red_pool_size)
+    blue_pool = candidate_pool(blue_scores, blue_pool_size)
 
-    for reds in seed_sets:
-        for blue in ranked_blues[:3]:
+    for reds in candidate_combos(red_pool, 6):
+        reds = tuple(sorted(reds))
+        for blue in blue_pool:
             if blue in reds:
                 continue
-            if len(reds) == 6 and (reds, blue) not in historical_keys:
-                score = combo_score(reds, blue, number_model, config)
-                candidates[(reds, blue)] = Ticket(reds=reds, blue=blue, score=score)
-
-    for _ in range(attempts):
-        reds = tuple(sorted(weighted_sample(red_scores, 6, rng)))
-        available_blue_scores = {number: score for number, score in blue_scores.items() if number not in reds}
-        blue = weighted_sample(available_blue_scores, 1, rng)[0]
-        key = (reds, blue)
-        if key in historical_keys or key in candidates:
-            continue
-        if blue in reds:
-            continue
-        if max(reds) - min(reds) < 14:
-            continue
-        score = combo_score(reds, blue, number_model, config)
-        candidates[key] = Ticket(reds=reds, blue=blue, score=score)
+            key = (reds, blue)
+            if key in historical_keys or key in candidates:
+                continue
+            score = combo_score(reds, blue, number_model, config)
+            candidates[key] = Ticket(reds=reds, blue=blue, score=score)
 
     selected: List[Ticket] = []
-    for ticket in sorted(candidates.values(), key=lambda item: item.score, reverse=True):
+    remaining = list(candidates.values())
+    diversity_weight = float(config.get("diversity_weight", 0.0))
+    while remaining and len(selected) < count:
+        ticket = max(
+            remaining,
+            key=lambda item: item.score - diversification_penalty(item, selected, diversity_weight),
+        )
+        remaining.remove(ticket)
+        if any(ticket.reds == other.reds for other in selected):
+            continue
+        selected.append(ticket)
+
+    for ticket in sorted(remaining, key=lambda item: item.score, reverse=True):
         if len(selected) >= count:
             break
         if any(ticket.reds == other.reds for other in selected):
             continue
-        overlap_ok = all(len(set(ticket.reds) & set(other.reds)) <= 4 for other in selected)
-        if overlap_ok or len(selected) < max(2, count // 4):
-            selected.append(ticket)
-
-    if len(selected) < count:
-        for ticket in sorted(candidates.values(), key=lambda item: item.score, reverse=True):
-            if len(selected) >= count:
-                break
-            if all(ticket.reds != existing.reds for existing in selected):
-                selected.append(ticket)
-
-    if len(selected) < count:
-        for ticket in sorted(candidates.values(), key=lambda item: item.score, reverse=True):
-            if len(selected) >= count:
-                break
-            if all(ticket.reds != existing.reds or ticket.blue != existing.blue for existing in selected):
-                selected.append(ticket)
+        selected.append(ticket)
 
     if include_reasons:
         selected = [
@@ -817,36 +855,134 @@ def prize_rank(red_hits: int, blue_hit: bool) -> str:
     return "未中"
 
 
-def evaluate_ticket(ticket: Ticket, draw: Draw) -> Dict[str, object]:
+def utility_by_rank(rank: str) -> float:
+    utility_map = {
+        "一等奖": 120.0,
+        "二等奖": 40.0,
+        "三等奖": 18.0,
+        "四等奖": 8.0,
+        "五等奖": 3.0,
+        "六等奖": 1.0,
+        "未中": 0.0,
+    }
+    return utility_map[rank]
+
+
+def evaluate_ticket(ticket: Ticket, draw: Draw) -> TicketEvaluation:
     red_hits = len(set(ticket.reds) & set(draw.reds))
     blue_hit = ticket.blue == draw.blue
     rank = prize_rank(red_hits, blue_hit)
-    rank_bonus = {"一等奖": 80, "二等奖": 35, "三等奖": 18, "四等奖": 9, "五等奖": 4, "六等奖": 1, "未中": 0}
-    score = red_hits * 2.0 + (1.2 if blue_hit else 0.0) + rank_bonus[rank]
-    return {"red_hits": red_hits, "blue_hit": blue_hit, "rank": rank, "score": score}
+    utility = utility_by_rank(rank) + red_hits * 0.6 + (0.5 if blue_hit else 0.0)
+    return TicketEvaluation(red_hits=red_hits, blue_hit=blue_hit, rank=rank, utility=utility)
+
+
+def evaluate_portfolio(
+    tickets: Sequence[Ticket], draw: Draw, cost_per_ticket: float = 1.0
+) -> PortfolioEvaluation:
+    results = [evaluate_ticket(ticket, draw) for ticket in tickets]
+    total_utility = sum(result.utility for result in results)
+    overlaps = [
+        len(set(left.reds) & set(right.reds))
+        for left, right in combinations(tickets, 2)
+    ]
+    overlap_penalty = sum(max(0, overlap - 3) * 0.35 for overlap in overlaps)
+    rank_order = ["一等奖", "二等奖", "三等奖", "四等奖", "五等奖", "六等奖", "未中"]
+    best_rank = min((result.rank for result in results), key=lambda rank: rank_order.index(rank), default="未中")
+    red_coverage = sum(result.red_hits for result in results) / max(len(results), 1)
+    blue_hits = sum(1 for result in results if result.blue_hit)
+    net_utility = total_utility - len(tickets) * cost_per_ticket - overlap_penalty
+    return PortfolioEvaluation(
+        ticket_count=len(tickets),
+        total_utility=total_utility,
+        net_utility=net_utility,
+        best_rank=best_rank,
+        red_coverage=red_coverage,
+        blue_hits=blue_hits,
+        overlap_penalty=overlap_penalty,
+    )
+
+
+def split_backtest_indices(total_windows: int) -> Tuple[range, range]:
+    tune_count = max(6, int(total_windows * 0.7))
+    tune_count = min(tune_count, max(total_windows - 3, 1))
+    return range(0, tune_count), range(tune_count, total_windows)
+
+
+def config_summary_score(net_utilities: Sequence[float], miss_streak: int) -> Tuple[float, float]:
+    average_value = statistics.mean(net_utilities) if net_utilities else 0.0
+    volatility = statistics.pstdev(net_utilities) if len(net_utilities) > 1 else 0.0
+    final_score = average_value - volatility * 0.35 - miss_streak * 0.18
+    return final_score, volatility
+
+
+def longest_non_prize_streak(portfolios: Sequence[PortfolioEvaluation]) -> int:
+    longest = 0
+    current = 0
+    for item in portfolios:
+        if item.best_rank == "未中":
+            current += 1
+            longest = max(longest, current)
+        else:
+            current = 0
+    return longest
+
+
+def small_prize_rate(portfolios: Sequence[PortfolioEvaluation]) -> float:
+    if not portfolios:
+        return 0.0
+    hit_count = sum(1 for item in portfolios if item.best_rank != "未中")
+    return hit_count / len(portfolios)
 
 
 def config_grid(iterations: int) -> List[Dict[str, float]]:
-    math_weights = [0.54, 0.60, 0.66, 0.72, 0.78]
     decays = [0.955, 0.970, 0.985]
-    omissions = [0.16, 0.24, 0.32]
-    pair_weights = [0.12, 0.20]
-    distribution_weights = [0.18, 0.28]
+    omissions = [0.12, 0.20, 0.28]
+    pair_weights = [0.10, 0.18, 0.26]
+    distribution_weights = [0.18, 0.28, 0.38]
+    diversity_weights = [0.18, 0.30]
+    mystic_caps = [0.00, 0.04, 0.08]
+    base_modes = ["stats_only", "stats_plus_mystic"]
     configs = []
-    for math_weight, decay, omission, pair_weight, distribution_weight in product(
-        math_weights, decays, omissions, pair_weights, distribution_weights
+    for decay, omission, pair_weight, distribution_weight, diversity_weight, mystic_cap, base_mode in product(
+        decays,
+        omissions,
+        pair_weights,
+        distribution_weights,
+        diversity_weights,
+        mystic_caps,
+        base_modes,
     ):
         configs.append(
             {
-                "math_weight": math_weight,
-                "mystic_weight": round(1.0 - math_weight, 2),
                 "decay": decay,
                 "omission_weight": omission,
                 "pair_weight": pair_weight,
                 "distribution_weight": distribution_weight,
+                "diversity_weight": diversity_weight,
+                "mystic_cap": mystic_cap,
+                "mode_label": base_mode,
             }
         )
-    return configs[: max(1, min(iterations, len(configs)))]
+
+    configs = sorted(
+        configs,
+        key=lambda config: stable_seed(
+            config["decay"],
+            config["omission_weight"],
+            config["pair_weight"],
+            config["distribution_weight"],
+            config["diversity_weight"],
+            config["mystic_cap"],
+            config["mode_label"],
+        ),
+    )
+    if iterations >= len(configs):
+        return configs
+    target = max(1, iterations)
+    if target == 1:
+        return [configs[0]]
+    indices = [round(index * (len(configs) - 1) / (target - 1)) for index in range(target)]
+    return [configs[index] for index in indices]
 
 
 def run_backtest(
@@ -857,28 +993,60 @@ def run_backtest(
     iterations: int,
 ) -> BacktestResult:
     chronological = list(reversed(draws))
-    if len(chronological) < 45:
-        default_config = config_grid(1)[0]
-        return BacktestResult(0, 1, ticket_count, default_config, 0.0, 0.0, 0.0, {}, [])
-
-    start_index = max(30, len(chronological) - windows)
     configs = config_grid(iterations)
     tickets_per_draw = min(ticket_count, 30)
+    if len(chronological) < 45:
+        default_config = configs[0]
+        return BacktestResult(
+            evaluated_windows=0,
+            iterations=len(configs),
+            tickets_per_draw=tickets_per_draw,
+            best_config=default_config,
+            average_score=0.0,
+            average_red_hits=0.0,
+            blue_hit_rate=0.0,
+            best_prize_counts={},
+            top_iterations=[],
+        )
+
+    start_index = max(30, len(chronological) - windows)
+    target_indices = list(range(start_index, len(chronological)))
+    tune_range, validate_range = split_backtest_indices(len(target_indices))
     summaries = []
+    stats_cache: Dict[Tuple[int, float], Dict[str, object]] = {}
+    number_model_cache: Dict[Tuple[int, float, float, float, str], Dict[str, object]] = {}
 
     for config_index, config in enumerate(configs, start=1):
-        total_score = 0.0
-        total_red_hits = 0
-        blue_hits = 0
+        tune_portfolios: List[PortfolioEvaluation] = []
+        validate_portfolios: List[PortfolioEvaluation] = []
+        all_portfolios: List[PortfolioEvaluation] = []
+        tune_utilities: List[float] = []
+        validate_utilities: List[float] = []
         prize_counts: Counter[str] = Counter()
-        evaluated = 0
 
-        for target_index in range(start_index, len(chronological)):
+        for offset, target_index in enumerate(target_indices):
             target = chronological[target_index]
             history = chronological[:target_index]
             if len(history) < 30:
                 continue
             history_newest = list(reversed(history[-160:]))
+            decay = float(config["decay"])
+            stats_key = (target_index, decay)
+            stats = stats_cache.get(stats_key)
+            if stats is None:
+                stats = build_stats(history_newest, decay)
+                stats_cache[stats_key] = stats
+            model_key = (
+                target_index,
+                decay,
+                float(config["omission_weight"]),
+                float(config.get("mystic_cap", 0.0)),
+                str(config.get("mode_label", "")),
+            )
+            number_model = number_model_cache.get(model_key)
+            if number_model is None:
+                number_model = build_number_scores(history_newest, profile, config, stats=stats)
+                number_model_cache[model_key] = number_model
             tickets = generate_tickets(
                 history_newest,
                 profile,
@@ -887,43 +1055,91 @@ def run_backtest(
                 seed_context=f"backtest-{config_index}-{target.issue}",
                 include_reasons=False,
                 quick=True,
+                number_model=number_model,
             )
             if not tickets:
                 continue
-            results = [evaluate_ticket(ticket, target) for ticket in tickets]
-            best = max(results, key=lambda result: float(result["score"]))
-            total_score += float(best["score"])
-            total_red_hits += int(best["red_hits"])
-            blue_hits += 1 if best["blue_hit"] else 0
-            prize_counts[str(best["rank"])] += 1
-            evaluated += 1
+            portfolio = evaluate_portfolio(tickets, target)
+            all_portfolios.append(portfolio)
+            if offset in tune_range:
+                tune_portfolios.append(portfolio)
+                tune_utilities.append(portfolio.net_utility)
+            elif offset in validate_range:
+                validate_portfolios.append(portfolio)
+                validate_utilities.append(portfolio.net_utility)
+            prize_counts[portfolio.best_rank] += 1
 
+        evaluated = len(all_portfolios)
         if evaluated:
+            net_utilities = [item.net_utility for item in all_portfolios]
+            tune_miss_streak = longest_non_prize_streak(tune_portfolios)
+            validate_miss_streak = longest_non_prize_streak(validate_portfolios)
+            tune_score, _ = config_summary_score(tune_utilities, tune_miss_streak)
+            validate_score, _ = config_summary_score(validate_utilities, validate_miss_streak)
+            _, volatility = config_summary_score(net_utilities, miss_streak=0)
+            selection_portfolios = validate_portfolios or tune_portfolios or all_portfolios
+            selection_utilities = [item.net_utility for item in selection_portfolios]
+            selection_red_coverages = [item.red_coverage for item in selection_portfolios]
+            selection_blue_hits = sum(1 for item in selection_portfolios if item.blue_hits > 0)
+            selection_evaluated = len(selection_portfolios)
+            mode_label = "stats_only"
+            if tune_utilities and validate_utilities:
+                mode_label = "tune_validate"
+            elif tune_utilities:
+                mode_label = "tune_only"
+            elif validate_utilities:
+                mode_label = "validate_only"
             summaries.append(
                 {
                     "iteration": config_index,
                     "config": config,
-                    "average_score": total_score / evaluated,
-                    "average_red_hits": total_red_hits / evaluated,
-                    "blue_hit_rate": blue_hits / evaluated,
+                    "average_score": statistics.mean(selection_utilities),
+                    "average_red_hits": statistics.mean(selection_red_coverages),
+                    "blue_hit_rate": selection_blue_hits / selection_evaluated,
                     "prize_counts": dict(prize_counts),
                     "evaluated": evaluated,
+                    "tune_score": tune_score,
+                    "validate_score": validate_score,
+                    "volatility": volatility,
+                    "max_miss_streak": validate_miss_streak if validate_portfolios else tune_miss_streak,
+                    "small_prize_rate": small_prize_rate(all_portfolios),
+                    "mode_label": mode_label,
                 }
             )
 
     if not summaries:
         default_config = configs[0]
-        return BacktestResult(0, len(configs), tickets_per_draw, default_config, 0.0, 0.0, 0.0, {}, [])
+        return BacktestResult(
+            evaluated_windows=0,
+            iterations=len(configs),
+            tickets_per_draw=tickets_per_draw,
+            best_config=default_config,
+            average_score=0.0,
+            average_red_hits=0.0,
+            blue_hit_rate=0.0,
+            best_prize_counts={},
+            top_iterations=[],
+        )
 
+    tune_shortlist_size = max(3, min(12, max(1, len(summaries) // 6)))
     summaries.sort(
         key=lambda item: (
-            float(item["average_score"]),
-            float(item["average_red_hits"]),
-            float(item["blue_hit_rate"]),
+            -float(item["tune_score"]),
+            float(item["volatility"]),
+            int(item["max_miss_streak"]),
+            -float(item["validate_score"]),
         ),
-        reverse=True,
     )
-    best = summaries[0]
+    tune_shortlist = summaries[:tune_shortlist_size]
+    tune_shortlist.sort(
+        key=lambda item: (
+            -float(item["validate_score"]),
+            -float(item["tune_score"]),
+            float(item["volatility"]),
+            int(item["max_miss_streak"]),
+        ),
+    )
+    best = tune_shortlist[0]
     return BacktestResult(
         evaluated_windows=int(best["evaluated"]),
         iterations=len(configs),
@@ -933,7 +1149,13 @@ def run_backtest(
         average_red_hits=float(best["average_red_hits"]),
         blue_hit_rate=float(best["blue_hit_rate"]),
         best_prize_counts=best["prize_counts"],
-        top_iterations=summaries[:5],
+        top_iterations=tune_shortlist[:5],
+        tune_score=float(best["tune_score"]),
+        validate_score=float(best["validate_score"]),
+        volatility=float(best["volatility"]),
+        max_miss_streak=int(best["max_miss_streak"]),
+        small_prize_rate=float(best["small_prize_rate"]),
+        mode_label=str(best["mode_label"]),
     )
 
 
@@ -992,17 +1214,20 @@ def format_prize_counts(prize_counts: Dict[str, int]) -> str:
     return "，".join(parts) if parts else "暂无"
 
 
+def backtest_mode_label(backtest: BacktestResult) -> str:
+    mode_value = backtest.mode_label
+    if mode_value not in {"stats_plus_mystic", "stats_only"}:
+        mode_value = str(backtest.best_config.get("mode_label", mode_value))
+    return "玄学增强" if mode_value == "stats_plus_mystic" else "纯统计基线"
+
+
 def build_backtest_explanation(backtest: BacktestResult) -> List[str]:
-    score_hint = "说明这套参数整体更稳" if backtest.average_score >= 4 else "说明这套参数有一定效果，但不算特别强"
-    math_bias = "数学成分略重" if backtest.best_config["math_weight"] >= backtest.best_config["mystic_weight"] else "玄学成分略重"
     return [
-        f"这次拿最近 {backtest.evaluated_windows} 期历史开奖做了“模拟考试”，看看模型放到过去会打出什么成绩。",
-        f"每一期回测都只看当期之前的数据，不偷看后面的开奖号码，所以更接近真实下注前能拿到的信息。",
-        f"每期会先生成 {backtest.tickets_per_draw} 注，再只拿其中表现最好的一注给这一轮参数记分，所以这里是在比“这一轮参数最能打的上限”。",
-        f"平均红球命中 {backtest.average_red_hits:.2f}，意思是回看这些历史期时，最好那一注平均能碰到接近 2 个红球。",
-        f"蓝球命中率 {backtest.blue_hit_rate * 100:.1f}% ，意思是 100 期里大约有 {round(backtest.blue_hit_rate * 100)} 期蓝球能对上。",
-        f"平均评分 {backtest.average_score:.2f} 不是奖金，是内部综合分；红球命中多、蓝球命中、奖级更高，分数就更高。{score_hint}。",
-        f"最后选中的参数是数学 {backtest.best_config['math_weight']:.2f} + 玄学 {backtest.best_config['mystic_weight']:.2f}，也就是 {math_bias}；衰减 {backtest.best_config['decay']:.3f} 代表更看重近期走势，遗漏 {backtest.best_config['omission_weight']:.2f} 代表会给久未出的号一点补分。",
+        f"这次先用最近 {backtest.evaluated_windows} 期里的前半段挑参数，再用后半段做验证，尽量减少参数刷分。",
+        f"主指标改成整组 {backtest.tickets_per_draw} 注号码的组合表现，不再只看每期最好的一注。",
+        f"验证段组合得分 {backtest.validate_score:.2f}，调参段 {backtest.tune_score:.2f}，波动 {backtest.volatility:.2f}。",
+        f"最长连挂 {backtest.max_miss_streak} 期，有奖覆盖率 {backtest.small_prize_rate * 100:.1f}%。",
+        f"当前模式：{backtest_mode_label(backtest)}。",
     ]
 
 
@@ -1152,12 +1377,13 @@ TEMPLATE = """
         </div>
         <div class="span2">
           <label>回测期数</label>
-          <input type="number" name="backtest_windows" min="5" max="80" value="{{ form.backtest_windows }}">
+          <input type="number" name="backtest_windows" min="20" max="100" value="{{ form.backtest_windows }}">
         </div>
         <div class="span2">
           <label>迭代轮数</label>
-          <input type="number" name="iterations" min="1" max="180" value="{{ form.iterations }}">
+          <input type="number" name="iterations" min="12" max="180" value="{{ form.iterations }}">
         </div>
+        <div class="span6 field-note">默认使用 60 期回测和 72 轮参数覆盖；数值越大越稳但耗时越长。</div>
         <div class="span3">
           <button type="submit" id="generateButton">排盘 + 回测迭代 + 生成号码</button>
         </div>
@@ -1221,14 +1447,17 @@ TEMPLATE = """
           <span class="pill">每期：{{ backtest.tickets_per_draw }} 注</span>
         </p>
         <p>
-          <span class="pill">平均评分：{{ "%.2f"|format(backtest.average_score) }}</span>
-          <span class="pill">平均红球命中：{{ "%.2f"|format(backtest.average_red_hits) }}</span>
-          <span class="pill">蓝球命中率：{{ "%.1f"|format(backtest.blue_hit_rate * 100) }}%</span>
+          <span class="pill">调参段：{{ "%.2f"|format(backtest.tune_score) }}</span>
+          <span class="pill">验证段：{{ "%.2f"|format(backtest.validate_score) }}</span>
+          <span class="pill">波动：{{ "%.2f"|format(backtest.volatility) }}</span>
+          <span class="pill">最长连挂：{{ backtest.max_miss_streak }} 期</span>
+          <span class="pill">有奖覆盖：{{ "%.1f"|format(backtest.small_prize_rate * 100) }}%</span>
+          <span class="pill">模式：{{ backtest_mode_text }}</span>
         </p>
         <h3>优胜参数</h3>
         <p>
-          <span class="pill">数学 {{ "%.2f"|format(backtest.best_config.math_weight) }}</span>
-          <span class="pill">玄学 {{ "%.2f"|format(backtest.best_config.mystic_weight) }}</span>
+          <span class="pill">模式 {{ backtest.best_config.mode_label }}</span>
+          <span class="pill">玄学偏置 {{ "%.2f"|format(backtest.best_config.mystic_cap) }}</span>
           <span class="pill">衰减 {{ "%.3f"|format(backtest.best_config.decay) }}</span>
           <span class="pill">遗漏 {{ "%.2f"|format(backtest.best_config.omission_weight) }}</span>
         </p>
@@ -1362,8 +1591,8 @@ def index():
         "lunar_day": request.form.get("lunar_day", "1"),
         "lunar_leap": request.form.get("lunar_leap", "0"),
         "ticket_count": request.form.get("ticket_count", "5"),
-        "backtest_windows": request.form.get("backtest_windows", "30"),
-        "iterations": request.form.get("iterations", "36"),
+        "backtest_windows": request.form.get("backtest_windows", "60"),
+        "iterations": request.form.get("iterations", "72"),
     }
     profile = None
     backtest = None
@@ -1383,8 +1612,8 @@ def index():
             form["lunar_leap"] = "1" if request.form.get("lunar_leap") == "1" else "0"
             birth_dt, birth_input_summary = parse_birth_input(form)
             ticket_count = clamp_int(form["ticket_count"], 5, 1, 30)
-            backtest_windows = clamp_int(form["backtest_windows"], 30, 5, 80)
-            iterations = clamp_int(form["iterations"], 36, 1, 180)
+            backtest_windows = clamp_int(form["backtest_windows"], 60, 20, 100)
+            iterations = clamp_int(form["iterations"], 72, 12, 180)
             form["gender"] = gender
             form["ticket_count"] = str(ticket_count)
             form["backtest_windows"] = str(backtest_windows)
@@ -1427,6 +1656,7 @@ def index():
         profile=profile,
         backtest=backtest,
         backtest_explanation=backtest_explanation,
+        backtest_mode_text=backtest_mode_label(backtest) if backtest else "",
         top_iteration_rows=top_iteration_rows,
         birth_input_summary=birth_input_summary,
         tickets=tickets,
