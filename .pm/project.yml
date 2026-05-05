@@ -1,8 +1,8 @@
 version: 1
 name: SSQ
-summary: 本地 Flask 双色球选号工具，现阶段目标是把回测从“最好一注刷分”升级为更稳的组合验证，并保留弱化后的玄学特色。
+summary: 本地 Flask 双色球选号工具，已把回测升级为调参/验证分离的组合评价，并进一步以风险折扣后的数学期望作为主指标。
 status: active
-phase: planning
+phase: validation
 tags:
   - flask
   - lottery
@@ -16,37 +16,37 @@ features:
     summary: 已支持抓取最近 200 期开奖、八字排盘和基础结果解释。
   - id: FEAT-2
     title: 稳定回测 v2
-    status: doing
+    status: done
     priority: high
-    summary: 已完成设计与计划，准备实现调参与验证分离、组合评价和弱玄学偏置。
+    summary: 已实现调参与验证分离、Portfolio 组合评价、候选池选号、弱玄学偏置和 EV-LCB 排名。
 
 requirements:
   - id: REQ-1
     title: Web 端直接运行
-    status: doing
+    status: done
     priority: high
     summary: 继续保持 Flask 单机部署、少依赖和约 15-30 秒的单次计算预算。
   - id: REQ-2
     title: 真实外推更稳
-    status: doing
+    status: done
     priority: high
-    summary: 回测主指标改为组合表现，并降低过拟合与高波动配置的优势。
+    summary: 回测主指标改为验证段期望净值的下置信界，并降低过拟合与高波动配置的优势。
 
 progress:
-  summary: 已确认产品方向、完成稳定回测 v2 设计，并写出实施计划。
+  summary: 已完成数学期望优先的 EV-LCB 排名迭代，并通过真实数据回测与页面烟测验证。
   counts:
-    planned: 2
-    doing: 2
-    done: 1
+    planned: 0
+    doing: 0
+    done: 3
     blocked: 0
 
 blockers:
   - 仅有近 200 期历史样本，验证稳定性提升会是渐进式而非质变。
 
 next_actions:
-  - 实现组合收益代理和 Portfolio 评价
-  - 将回测改为调参段与验证段分离
-  - 把随机采样换成候选池搜索与分散选票
+  - 继续观察 EV-LCB 与实际开奖滚动表现是否比覆盖率优先更稳定
+  - 根据真实运行耗时微调默认迭代轮数
+  - 继续避免把彩票随机性包装成确定性预测
 
 links:
   - label: repo-path

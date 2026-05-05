@@ -149,6 +149,11 @@ class BacktestResult:
     top_iterations: List[Dict[str, object]]
     tune_score: float = 0.0
     validate_score: float = 0.0
+    tune_expected_value: float = 0.0
+    validate_expected_value: float = 0.0
+    validate_ev_lcb: float = 0.0
+    per_ticket_expected_value: float = 0.0
+    ev_standard_error: float = 0.0
     volatility: float = 0.0
     max_miss_streak: int = 0
     small_prize_rate: float = 0.0
@@ -908,11 +913,16 @@ def split_backtest_indices(total_windows: int) -> Tuple[range, range]:
     return range(0, tune_count), range(tune_count, total_windows)
 
 
-def config_summary_score(net_utilities: Sequence[float], miss_streak: int) -> Tuple[float, float]:
+def expected_value_lcb(
+    net_utilities: Sequence[float],
+    uncertainty_z: float = 1.28,
+    volatility_weight: float = 0.12,
+) -> Tuple[float, float, float, float]:
     average_value = statistics.mean(net_utilities) if net_utilities else 0.0
     volatility = statistics.pstdev(net_utilities) if len(net_utilities) > 1 else 0.0
-    final_score = average_value - volatility * 0.35 - miss_streak * 0.18
-    return final_score, volatility
+    standard_error = volatility / math.sqrt(len(net_utilities)) if net_utilities else 0.0
+    lower_bound = average_value - volatility * volatility_weight - standard_error * uncertainty_z
+    return average_value, volatility, standard_error, lower_bound
 
 
 def longest_non_prize_streak(portfolios: Sequence[PortfolioEvaluation]) -> int:
@@ -1074,14 +1084,26 @@ def run_backtest(
             net_utilities = [item.net_utility for item in all_portfolios]
             tune_miss_streak = longest_non_prize_streak(tune_portfolios)
             validate_miss_streak = longest_non_prize_streak(validate_portfolios)
-            tune_score, _ = config_summary_score(tune_utilities, tune_miss_streak)
-            validate_score, _ = config_summary_score(validate_utilities, validate_miss_streak)
-            _, volatility = config_summary_score(net_utilities, miss_streak=0)
+            tune_ev, tune_volatility, tune_standard_error, tune_score = expected_value_lcb(tune_utilities)
+            validate_ev, validate_volatility, validate_standard_error, validate_score = expected_value_lcb(
+                validate_utilities
+            )
+            all_ev, all_volatility, all_standard_error, all_score = expected_value_lcb(net_utilities)
             selection_portfolios = validate_portfolios or tune_portfolios or all_portfolios
             selection_utilities = [item.net_utility for item in selection_portfolios]
             selection_red_coverages = [item.red_coverage for item in selection_portfolios]
             selection_blue_hits = sum(1 for item in selection_portfolios if item.blue_hits > 0)
             selection_evaluated = len(selection_portfolios)
+            selection_expected_value = statistics.mean(selection_utilities) if selection_utilities else all_ev
+            selection_score = validate_score if validate_portfolios else tune_score if tune_portfolios else all_score
+            selection_standard_error = (
+                validate_standard_error
+                if validate_portfolios
+                else tune_standard_error if tune_portfolios else all_standard_error
+            )
+            selection_volatility = (
+                validate_volatility if validate_portfolios else tune_volatility if tune_portfolios else all_volatility
+            )
             mode_label = "stats_only"
             if tune_utilities and validate_utilities:
                 mode_label = "tune_validate"
@@ -1093,16 +1115,21 @@ def run_backtest(
                 {
                     "iteration": config_index,
                     "config": config,
-                    "average_score": statistics.mean(selection_utilities),
+                    "average_score": selection_expected_value,
                     "average_red_hits": statistics.mean(selection_red_coverages),
                     "blue_hit_rate": selection_blue_hits / selection_evaluated,
                     "prize_counts": dict(prize_counts),
                     "evaluated": evaluated,
                     "tune_score": tune_score,
                     "validate_score": validate_score,
-                    "volatility": volatility,
+                    "tune_expected_value": tune_ev,
+                    "validate_expected_value": validate_ev,
+                    "validate_ev_lcb": selection_score,
+                    "per_ticket_expected_value": selection_expected_value / max(tickets_per_draw, 1),
+                    "ev_standard_error": selection_standard_error,
+                    "volatility": selection_volatility,
                     "max_miss_streak": validate_miss_streak if validate_portfolios else tune_miss_streak,
-                    "small_prize_rate": small_prize_rate(all_portfolios),
+                    "small_prize_rate": small_prize_rate(selection_portfolios),
                     "mode_label": mode_label,
                 }
             )
@@ -1125,18 +1152,21 @@ def run_backtest(
     summaries.sort(
         key=lambda item: (
             -float(item["tune_score"]),
+            -float(item["tune_expected_value"]),
             float(item["volatility"]),
-            int(item["max_miss_streak"]),
             -float(item["validate_score"]),
+            int(item["max_miss_streak"]),
         ),
     )
     tune_shortlist = summaries[:tune_shortlist_size]
     tune_shortlist.sort(
         key=lambda item: (
             -float(item["validate_score"]),
-            -float(item["tune_score"]),
+            -float(item["validate_expected_value"]),
+            float(item["ev_standard_error"]),
             float(item["volatility"]),
             int(item["max_miss_streak"]),
+            -float(item["tune_score"]),
         ),
     )
     best = tune_shortlist[0]
@@ -1152,6 +1182,11 @@ def run_backtest(
         top_iterations=tune_shortlist[:5],
         tune_score=float(best["tune_score"]),
         validate_score=float(best["validate_score"]),
+        tune_expected_value=float(best["tune_expected_value"]),
+        validate_expected_value=float(best["validate_expected_value"]),
+        validate_ev_lcb=float(best["validate_ev_lcb"]),
+        per_ticket_expected_value=float(best["per_ticket_expected_value"]),
+        ev_standard_error=float(best["ev_standard_error"]),
         volatility=float(best["volatility"]),
         max_miss_streak=int(best["max_miss_streak"]),
         small_prize_rate=float(best["small_prize_rate"]),
@@ -1224,8 +1259,9 @@ def backtest_mode_label(backtest: BacktestResult) -> str:
 def build_backtest_explanation(backtest: BacktestResult) -> List[str]:
     return [
         f"这次先用最近 {backtest.evaluated_windows} 期里的前半段挑参数，再用后半段做验证，尽量减少参数刷分。",
-        f"主指标改成整组 {backtest.tickets_per_draw} 注号码的组合表现，不再只看每期最好的一注。",
-        f"验证段组合得分 {backtest.validate_score:.2f}，调参段 {backtest.tune_score:.2f}，波动 {backtest.volatility:.2f}。",
+        f"主指标改成整组 {backtest.tickets_per_draw} 注号码的数学期望下置信界，不再优先追小奖覆盖率。",
+        f"验证段期望净值 {backtest.validate_expected_value:.2f}，风险折扣后 EV {backtest.validate_ev_lcb:.2f}，每注期望 {backtest.per_ticket_expected_value:.2f}。",
+        f"调参段风险折扣 EV {backtest.tune_score:.2f}，验证段波动 {backtest.volatility:.2f}，标准误 {backtest.ev_standard_error:.2f}。",
         f"最长连挂 {backtest.max_miss_streak} 期，有奖覆盖率 {backtest.small_prize_rate * 100:.1f}%。",
         f"当前模式：{backtest_mode_label(backtest)}。",
     ]
@@ -1236,8 +1272,11 @@ def build_iteration_plain_text(item: Dict[str, object]) -> str:
     missed = int(prize_counts.get("未中", 0))
     blue_only = int(prize_counts.get("六等奖", 0))
     small_prize = int(prize_counts.get("五等奖", 0)) + int(prize_counts.get("四等奖", 0))
+    validate_ev = float(item.get("validate_expected_value", item.get("average_score", 0.0)))
+    ev_lcb = float(item.get("validate_ev_lcb", item.get("validate_score", 0.0)))
     return (
-        f"大白话：这轮参数回看历史时，大约 {missed} 期完全没碰上，"
+        f"大白话：这轮参数验证期望 {validate_ev:.2f}，风险折扣后 {ev_lcb:.2f}；"
+        f"回看历史时大约 {missed} 期完全没碰上，"
         f"{blue_only} 期主要靠蓝球命中，{small_prize} 期能摸到小奖。"
     )
 
@@ -1447,9 +1486,12 @@ TEMPLATE = """
           <span class="pill">每期：{{ backtest.tickets_per_draw }} 注</span>
         </p>
         <p>
-          <span class="pill">调参段：{{ "%.2f"|format(backtest.tune_score) }}</span>
-          <span class="pill">验证段：{{ "%.2f"|format(backtest.validate_score) }}</span>
+          <span class="pill">验证EV：{{ "%.2f"|format(backtest.validate_expected_value) }}</span>
+          <span class="pill">风险折扣EV：{{ "%.2f"|format(backtest.validate_ev_lcb) }}</span>
+          <span class="pill">每注EV：{{ "%.2f"|format(backtest.per_ticket_expected_value) }}</span>
+          <span class="pill">调参EV-LCB：{{ "%.2f"|format(backtest.tune_score) }}</span>
           <span class="pill">波动：{{ "%.2f"|format(backtest.volatility) }}</span>
+          <span class="pill">标准误：{{ "%.2f"|format(backtest.ev_standard_error) }}</span>
           <span class="pill">最长连挂：{{ backtest.max_miss_streak }} 期</span>
           <span class="pill">有奖覆盖：{{ "%.1f"|format(backtest.small_prize_rate * 100) }}%</span>
           <span class="pill">模式：{{ backtest_mode_text }}</span>
@@ -1463,12 +1505,13 @@ TEMPLATE = """
         </p>
         <h3>前 5 轮</h3>
         <table class="small-table">
-          <thead><tr><th>轮次</th><th>评分</th><th>红球</th><th>蓝球</th><th>奖级概览</th></tr></thead>
+          <thead><tr><th>轮次</th><th>EV-LCB</th><th>验证EV</th><th>红球</th><th>蓝球</th><th>奖级概览</th></tr></thead>
           <tbody>
             {% for item in top_iteration_rows %}
               <tr>
                 <td>{{ item.iteration }}</td>
-                <td>{{ "%.2f"|format(item.average_score) }}</td>
+                <td>{{ "%.2f"|format(item.validate_ev_lcb) }}</td>
+                <td>{{ "%.2f"|format(item.validate_expected_value) }}</td>
                 <td>{{ "%.2f"|format(item.average_red_hits) }}</td>
                 <td>{{ "%.1f"|format(item.blue_hit_rate * 100) }}%</td>
                 <td>
