@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tile Calculator | Pieces, Boxes, Waste, and Budget</title>
+  <meta name="description" content="Calculate tile pieces and boxes from area, tile size, waste allowance, and box count.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/tile-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a>
+      <div class="nav-links">
+        <a href="/tools/paint-calculator/">Paint</a>
+        <a href="/tools/tile-calculator/">Tile</a>
+        <a href="/tools/curtain-calculator/">Curtains</a>
+        <a href="/guides/tile-waste-rate/">Guides</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">Tile calculator</p>
+        <h1>Turn square footage into tile boxes.</h1>
+        <p class="lead">Plan tile pieces, boxes, waste allowance, and a simple material budget before ordering.</p>
+      </div>
+      <img src="/assets/material-strip.svg" alt="Tile samples and measuring tape on a workbench">
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <h2>Tile inputs</h2>
+        <form class="calculator" data-tool="tile">
+          <div class="field"><label>Area to tile (sq ft)</label><input name="area" type="number" min="1" step="0.1" value="120"></div>
+          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label>Tile width (in)</label><input name="tileWidth" type="number" min="1" step="0.1" value="12"></div>
+          <div class="field"><label>Tile height (in)</label><input name="tileHeight" type="number" min="1" step="0.1" value="24"></div>
+          <div class="field"><label>Tiles per box</label><input name="boxCount" type="number" min="1" step="1" value="8"></div>
+          <div class="field"><label>Price per box</label><input name="boxPrice" type="number" min="0" step="1" value="36"></div>
+          <div class="button-row">
+            <button type="submit">Calculate tile</button>
+            <button class="secondary" type="button" data-download-result>Download result card</button>
+            <button class="secondary" type="button" data-share-page>Copy share link</button>
+          </div>
+        </form>
+        <p class="note">Tip: use 10% waste for simple layouts, 15% for diagonal layouts or many corners, and more when matching patterns.</p>
+      </div>
+
+      <aside class="result-card" data-result-for="tile">
+        <p class="eyebrow">Estimate</p>
+        <h2 data-result-title>Tile estimate</h2>
+        <div class="result-main" data-result-metrics></div>
+        <p class="note" data-result-summary></p>
+      </aside>
+    </section>
+
+    <div class="ad-slot">Ad slot reserved for approved display ads</div>
+  </main>
+
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js"></script>
+</body>
+</html>

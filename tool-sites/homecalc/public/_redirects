@@ -1,0 +1,2 @@
+# Configure canonical host redirects in Cloudflare after choosing the final domain.
+# Keep this file so the project has a visible place for future redirect rules.

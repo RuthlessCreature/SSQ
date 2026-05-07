@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Curtain Calculator | Fullness, Rod Width, Panels, and Fabric</title>
+  <meta name="description" content="Estimate curtain rod width, fabric fullness, panel length, panel count, fabric yards, and budget.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/curtain-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a>
+      <div class="nav-links">
+        <a href="/tools/paint-calculator/">Paint</a>
+        <a href="/tools/tile-calculator/">Tile</a>
+        <a href="/tools/curtain-calculator/">Curtains</a>
+        <a href="/guides/curtain-fullness/">Guides</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">Curtain calculator</p>
+        <h1>Size curtains without guessing fullness.</h1>
+        <p class="lead">Estimate rod width, fabric width, panel length, panel count, and fabric budget from window measurements.</p>
+      </div>
+      <img src="/assets/material-strip.svg" alt="Curtain fabric and measuring tape on a workbench">
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <h2>Window and fabric inputs</h2>
+        <form class="calculator" data-tool="curtain">
+          <div class="field"><label>Window width (in)</label><input name="windowWidth" type="number" min="1" step="0.1" value="72"></div>
+          <div class="field"><label>Window height (in)</label><input name="windowHeight" type="number" min="1" step="0.1" value="60"></div>
+          <div class="field"><label>Fullness multiplier</label><input name="fullness" type="number" min="1" step="0.1" value="2"></div>
+          <div class="field"><label>Side return each side (in)</label><input name="sideReturn" type="number" min="0" step="0.5" value="8"></div>
+          <div class="field"><label>Extra drop (in)</label><input name="dropExtra" type="number" min="0" step="0.5" value="6"></div>
+          <div class="field"><label>Fabric panel width (in)</label><input name="panelWidth" type="number" min="1" step="1" value="54"></div>
+          <div class="field wide"><label>Price per fabric yard</label><input name="pricePerYard" type="number" min="0" step="1" value="22"></div>
+          <div class="button-row">
+            <button type="submit">Calculate curtains</button>
+            <button class="secondary" type="button" data-download-result>Download result card</button>
+            <button class="secondary" type="button" data-share-page>Copy share link</button>
+          </div>
+        </form>
+        <p class="note">Tip: 1.5x fullness looks tailored, 2x is common for bedrooms and living rooms, and 2.5x creates a heavier drape.</p>
+      </div>
+
+      <aside class="result-card" data-result-for="curtain">
+        <p class="eyebrow">Estimate</p>
+        <h2 data-result-title>Curtain estimate</h2>
+        <div class="result-main" data-result-metrics></div>
+        <p class="note" data-result-summary></p>
+      </aside>
+    </section>
+
+    <div class="ad-slot">Ad slot reserved for approved display ads</div>
+  </main>
+
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js"></script>
+</body>
+</html>
