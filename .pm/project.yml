@@ -1,8 +1,8 @@
 version: 1
 name: SSQ
-summary: 本地 Flask 双色球选号工具，已把回测升级为调参/验证分离的组合评价，并进一步以风险折扣后的数学期望作为主指标。
+summary: 本地 Flask 双色球选号工具，已把回测升级为调参/验证分离的组合评价，并补充 Cloudflare 上线、广告变现与病毒增长规划。
 status: active
-phase: validation
+phase: growth-planning
 tags:
   - flask
   - lottery
@@ -19,6 +19,31 @@ features:
     status: done
     priority: high
     summary: 已实现调参与验证分离、Portfolio 组合评价、候选池选号、弱玄学偏置和 EV-LCB 排名。
+  - id: FEAT-3
+    title: 商业化与增长规划
+    status: done
+    priority: high
+    summary: 已形成 Cloudflare 部署、广告合规、页面库存和病毒分享路径文档。
+  - id: FEAT-4
+    title: 工具站广告与上线 SOP
+    status: done
+    priority: high
+    summary: 已形成可复用的低成本工具站选题、AdSense 接入、Cloudflare Pages 上线和运营检查 SOP。
+  - id: FEAT-5
+    title: HomeCalc Tools 静态 MVP
+    status: done
+    priority: high
+    summary: 已在 tool-sites/homecalc 下创建 Cloudflare Pages 静态工具站，包含刷漆、瓷砖、窗帘三件套、指南页、广告占位和 SEO 基础文件。
+  - id: FEAT-6
+    title: 中国大陆收款与部署 SOP
+    status: done
+    priority: high
+    summary: 已形成面向中国大陆银行卡、Spaceship 域名、Cloudflare Pages 和 AdSense 电汇收款的操作 SOP。
+  - id: FEAT-7
+    title: 开局一下二号工具站
+    status: done
+    priority: high
+    summary: 已创建面向年轻人的八字奇门问事 Worker 工具站，支持公历/农历、真太阳时、出生地三级选择、子平四柱排盘、DeepSeek V4 解释层、AdSense/SEO/法律页面和 Obsidian 项目卡。
 
 requirements:
   - id: REQ-1
@@ -33,25 +58,40 @@ requirements:
     summary: 回测主指标改为验证段期望净值的下置信界，并降低过拟合与高波动配置的优势。
 
 progress:
-  summary: 已完成数学期望优先的 EV-LCB 排名迭代，并通过真实数据回测与页面烟测验证。
+  summary: 已完成稳定回测 v2、商业化路线、可复制工具站 SOP、HomeCalc Tools 静态 MVP、中国大陆银行卡收款/Spaceship/Cloudflare 部署 SOP，以及开局一下二号工具站 MVP；下一步是注册 kaijuyixia.com、设置 DeepSeek secret 并部署 Worker。
   counts:
     planned: 0
     doing: 0
-    done: 3
+    done: 8
     blocked: 0
 
 blockers:
   - 仅有近 200 期历史样本，验证稳定性提升会是渐进式而非质变。
+  - 彩票主题靠近广告平台的在线赌博限制边界，必须保持娱乐和数据实验定位。
+  - 八字奇门主题必须保持传统文化娱乐和自我复盘定位，不能做确定性预测、医疗、法律或投资建议。
 
 next_actions:
-  - 继续观察 EV-LCB 与实际开奖滚动表现是否比覆盖率优先更稳定
-  - 根据真实运行耗时微调默认迭代轮数
+  - 用 Cloudflare 做域名、安全和分析层，先把 Flask 跑在轻量 Python Origin 上
+  - 实现结果分享卡和 /share/<id> 分享页
+  - 增加免责声明、隐私页、robots.txt、sitemap.xml 和基础增长埋点
   - 继续避免把彩票随机性包装成确定性预测
+  - 注册 kaijuyixia.com 或替换为可用备选域名
+  - 为开局一下 Worker 设置 DEEPSEEK_API_KEY secret 并部署
 
 links:
   - label: repo-path
-    value: E:\github\SSQ
+    value: /Users/nicole/Documents/GitHub/SSQ
+  - label: commercialization-plan
+    value: docs/2026-05-05-cloudflare-ads-viral-plan.md
+  - label: tool-site-sop
+    value: docs/2026-05-05-cloudflare-tool-site-sop.md
+  - label: homecalc-mvp
+    value: tool-sites/homecalc
+  - label: mainland-payment-deploy-sop
+    value: docs/2026-05-05-mainland-china-ads-cloudflare-spaceship-sop.md
+  - label: kaijuyixia-mvp
+    value: tool-sites/baziqimen
 
 meta:
   source: codex-maintained
-  last_reviewed_at: 2026-04-23
+  last_reviewed_at: 2026-05-05

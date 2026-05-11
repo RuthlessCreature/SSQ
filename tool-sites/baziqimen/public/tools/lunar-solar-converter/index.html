@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>农历公历换算 | 开局一下</title>
+  <meta name="description" content="农历生日和公历生日互相换算，适合排八字前快速核对出生日期。">
+  <link rel="canonical" href="https://kaijuyixia.com/tools/lunar-solar-converter/">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="/"><span class="brand-mark"></span><span>开局一下</span></a>
+      <div class="nav-links"><a href="/">问事</a><a href="/tools/true-solar-time/">真太阳时</a><a href="/tools/lunar-solar-converter/">农历换算</a><a href="/guides/qimen-asking-guide/">指南</a></div>
+    </nav>
+  </header>
+  <main class="shell">
+    <section class="tool-page">
+      <div class="panel">
+        <p class="eyebrow">Calendar</p>
+        <h1>先把生日对上，别一上来就跑偏。</h1>
+        <p class="lead">公历、农历都能进问事工具；不确定的时候先在这里换算一下。</p>
+        <form class="form-grid" data-converter-tool>
+          <div class="field wide">
+            <label>换算方向</label>
+            <select name="mode">
+              <option value="solar-to-lunar">公历转农历</option>
+              <option value="lunar-to-solar">农历转公历</option>
+            </select>
+          </div>
+          <div class="field wide" data-convert-solar>
+            <label>公历日期</label>
+            <input name="solarDate" type="date" value="1998-08-18">
+          </div>
+          <div class="field" data-convert-lunar hidden><label>农历年</label><input name="lunarYear" type="number" min="1900" max="2100" value="1998"></div>
+          <div class="field" data-convert-lunar hidden><label>农历月</label><input name="lunarMonth" type="number" min="1" max="12" value="6"></div>
+          <div class="field" data-convert-lunar hidden><label>农历日</label><input name="lunarDay" type="number" min="1" max="30" value="27"></div>
+          <div class="field" data-convert-lunar hidden><span class="field-title">闰月</span><label class="checkbox-line"><input name="lunarLeap" type="checkbox">这是闰月</label></div>
+          <div class="button-row wide"><button type="submit">换一下</button><a class="button secondary" href="/">拿去问事</a></div>
+        </form>
+      </div>
+      <aside class="result-card">
+        <h2>换算结果</h2>
+        <div data-converter-output></div>
+        <p class="note">农历换算支持 1900-2100 年。遇到闰月，请确认族谱、出生证明或家里记录里写的是不是闰月。</p>
+      </aside>
+    </section>
+    <div class="ad-slot">广告位预留，审核通过后启用</div>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>传统文化娱乐工具。</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script type="module" src="/assets/app.js"></script>
+</body>
+</html>

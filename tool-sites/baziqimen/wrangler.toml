@@ -1,0 +1,14 @@
+name = "kaijuyixia-com"
+main = "src/worker.js"
+compatibility_date = "2026-05-08"
+workers_dev = true
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "404-page"
+
+[vars]
+DEEPSEEK_MODEL = "deepseek-v4-flash"
+DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+DEEPSEEK_THINKING = "disabled"

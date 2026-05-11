@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>真太阳时计算器 | 开局一下</title>
+  <meta name="description" content="按出生地省市区和日期时间估算真太阳时校正分钟，用于八字时柱复核。">
+  <link rel="canonical" href="https://kaijuyixia.com/tools/true-solar-time/">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="/"><span class="brand-mark"></span><span>开局一下</span></a>
+      <div class="nav-links"><a href="/">问事</a><a href="/tools/true-solar-time/">真太阳时</a><a href="/tools/lunar-solar-converter/">农历换算</a><a href="/guides/qimen-asking-guide/">指南</a></div>
+    </nav>
+  </header>
+  <main class="shell">
+    <section class="tool-page">
+      <div class="panel">
+        <p class="eyebrow">Solar time</p>
+        <h1>时柱差一点，味儿就不一样。</h1>
+        <p class="lead">出生地离东经 120 度越远，真太阳时偏差越明显。先算一下，再决定要不要用它排盘。</p>
+        <form class="form-grid" data-solar-tool data-location-group data-default-province="广东" data-default-city="深圳市" data-default-district="南山区">
+          <div class="field"><label>日期</label><input name="solarDate" type="date" value="1998-08-18"></div>
+          <div class="field"><label>时间</label><input name="birthTime" type="time" value="09:30"></div>
+          <div class="field wide">
+            <span class="field-title">出生地</span>
+            <div class="location-grid">
+              <select name="province" aria-label="省份"></select>
+              <select name="city" aria-label="城市"></select>
+              <select name="district" aria-label="区县"></select>
+            </div>
+          </div>
+          <div class="button-row wide"><button type="submit">算一下</button><a class="button secondary" href="/">回去问事</a></div>
+        </form>
+      </div>
+      <aside class="result-card">
+        <h2>校正结果</h2>
+        <div data-solar-output></div>
+        <p class="note">这里采用经度校正加均时差估算。细排时建议同时核对出生证明、医院记录和当地时区历史。</p>
+      </aside>
+    </section>
+    <div class="ad-slot">广告位预留，审核通过后启用</div>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>传统文化娱乐工具。</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script type="module" src="/assets/app.js"></script>
+</body>
+</html>

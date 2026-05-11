@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>开局一下 | 八字奇门问事小工具</title>
+  <meta name="description" content="输入性别、生辰、公历或农历、真太阳时和想问的事，用子平八字排盘加奇门结构化拆局，输出轻松好读的行动建议。">
+  <link rel="canonical" href="https://kaijuyixia.com/">
+  <meta property="og:title" content="开局一下">
+  <meta property="og:description" content="八字奇门问事，不端着，不神叨，给你一份能看懂的拆局卡。">
+  <link rel="stylesheet" href="/assets/styles.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="/"><span class="brand-mark"></span><span>开局一下</span></a>
+      <div class="nav-links">
+        <a href="/">问事</a>
+        <a href="/tools/true-solar-time/">真太阳时</a>
+        <a href="/tools/lunar-solar-converter/">农历换算</a>
+        <a href="/guides/qimen-asking-guide/">指南</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <div>
+        <p class="eyebrow">Bazi + Qimen</p>
+        <h1>把纠结的事，开局看一眼。</h1>
+        <p class="lead">底层用子平四柱，表层用轻松拆局。少一点玄乎，多一点能立刻执行的下一步。</p>
+      </div>
+      <div class="plate-preview" aria-label="九宫盘视觉预览">
+        <span>巽</span><span>离</span><span>坤</span>
+        <span>震</span><span>中</span><span>兑</span>
+        <span>艮</span><span>坎</span><span>乾</span>
+      </div>
+    </section>
+
+    <section class="tool-hero">
+      <div class="panel">
+        <h2>开局参数</h2>
+        <form class="form-grid" data-reading-form data-location-group data-default-province="广东" data-default-city="深圳市" data-default-district="南山区">
+          <div class="field wide">
+            <span class="field-title">性别</span>
+            <div class="segmented">
+              <label><input type="radio" name="gender" value="female" checked><span>女</span></label>
+              <label><input type="radio" name="gender" value="male"><span>男</span></label>
+              <label><input type="radio" name="gender" value="other"><span>不想说</span></label>
+            </div>
+          </div>
+
+          <div class="field wide">
+            <span class="field-title">生日类型</span>
+            <div class="segmented two">
+              <label><input type="radio" name="calendarType" value="solar" checked><span>公历</span></label>
+              <label><input type="radio" name="calendarType" value="lunar"><span>农历</span></label>
+            </div>
+          </div>
+
+          <div class="field" data-solar-fields>
+            <label for="solarDate">出生日期</label>
+            <input id="solarDate" name="solarDate" type="date" value="1998-08-18" min="1900-01-31" max="2100-12-31">
+          </div>
+          <div class="field" data-lunar-fields hidden>
+            <label for="lunarYear">农历年</label>
+            <input id="lunarYear" name="lunarYear" type="number" min="1900" max="2100" value="1998">
+          </div>
+          <div class="field" data-lunar-fields hidden>
+            <label for="lunarMonth">农历月</label>
+            <input id="lunarMonth" name="lunarMonth" type="number" min="1" max="12" value="6">
+          </div>
+          <div class="field" data-lunar-fields hidden>
+            <label for="lunarDay">农历日</label>
+            <input id="lunarDay" name="lunarDay" type="number" min="1" max="30" value="27">
+          </div>
+          <div class="field" data-lunar-fields hidden>
+            <span class="field-title">闰月</span>
+            <label class="checkbox-line"><input name="lunarLeap" type="checkbox">这是闰月</label>
+          </div>
+
+          <div class="field">
+            <label for="birthTime">出生时间</label>
+            <input id="birthTime" name="birthTime" type="time" value="09:30">
+          </div>
+          <div class="field">
+            <span class="field-title">真太阳时</span>
+            <label class="checkbox-line"><input name="useTrueSolar" type="checkbox" checked>启用出生地校正</label>
+          </div>
+
+          <div class="field wide" data-true-solar-location>
+            <span class="field-title">出生地</span>
+            <div class="location-grid">
+              <select name="province" aria-label="省份"></select>
+              <select name="city" aria-label="城市"></select>
+              <select name="district" aria-label="区县"></select>
+            </div>
+          </div>
+
+          <div class="field wide">
+            <label for="question">想问什么事</label>
+            <textarea id="question" name="question">我最近要不要换工作，新的 offer 值不值得冲？</textarea>
+          </div>
+
+          <div class="button-row wide">
+            <button type="submit">开局看看</button>
+            <button class="secondary" type="button" data-copy-reading>复制摘要</button>
+            <button class="secondary" type="button" data-download-reading>下载结果卡</button>
+          </div>
+          <div class="error wide" data-form-error></div>
+        </form>
+      </div>
+
+      <aside class="result-card" data-reading-output hidden>
+        <p class="eyebrow">Result card</p>
+        <p class="verdict" data-verdict></p>
+        <div class="tag-row">
+          <span class="tag" data-category></span>
+          <span class="tag" data-score></span>
+          <span class="tag" data-focus></span>
+        </div>
+        <div class="result-main" data-reading-metrics></div>
+        <p class="note" data-calendar-note></p>
+        <p class="note" data-solar-note></p>
+        <p class="note" data-engine-note></p>
+      </aside>
+    </section>
+
+    <div class="ad-slot">广告位预留，审核通过后启用</div>
+
+    <section class="panel">
+      <h2>四柱底盘</h2>
+      <div class="pillars" data-pillars></div>
+      <div data-elements></div>
+    </section>
+
+    <section class="panel" style="margin-top:18px;">
+      <h2>奇门拆局</h2>
+      <div class="qimen-grid" data-plate></div>
+      <div data-sections></div>
+      <h3>这波怎么做</h3>
+      <ul class="action-list" data-actions></ul>
+      <h3 style="margin-top:16px;">边界提醒</h3>
+      <ul class="plain-list" data-cautions></ul>
+    </section>
+
+    <section>
+      <div class="cards-grid">
+        <a class="mini-card" href="/tools/true-solar-time/"><strong>真太阳时小算</strong><p class="muted">出生地经度一校正，时柱更靠谱一点。</p></a>
+        <a class="mini-card" href="/tools/lunar-solar-converter/"><strong>农历公历换算</strong><p class="muted">农历生日先转公历，再进子平排盘。</p></a>
+        <a class="mini-card" href="/guides/bazi-question-framing/"><strong>怎么问更准</strong><p class="muted">别问“我会不会发财”，换成可执行问题。</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>开局一下是传统文化娱乐工具，不替代专业建议。</span>
+      <span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a><a href="/contact/">Contact</a></span>
+    </div>
+  </footer>
+
+  <script type="module" src="/assets/app.js"></script>
+</body>
+</html>

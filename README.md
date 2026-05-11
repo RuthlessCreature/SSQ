@@ -43,3 +43,11 @@ HOST=0.0.0.0 PORT=8080 python app.py
 - 八字排盘优先使用 `lunar-python`，支持公历和农历输入，按节气换月；如果依赖不可用，会降级为内置近似算法并在页面提示。
 - 回测时，每个目标期只使用它之前的历史开奖数据，避免偷看未来数据。
 - 生成号码时会避开同一注里红球数字和蓝球数字重复。
+
+## 商业化与上线
+
+- [Cloudflare 部署、广告变现与病毒增长文档](docs/2026-05-05-cloudflare-ads-viral-plan.md)
+- [Cloudflare 工具站选题、广告接入与上线 SOP](docs/2026-05-05-cloudflare-tool-site-sop.md)
+- [中国大陆银行卡广告收款、Spaceship 域名与 Cloudflare 部署 SOP](docs/2026-05-05-mainland-china-ads-cloudflare-spaceship-sop.md)
+- [HomeCalc Tools 静态工具站 MVP](tool-sites/homecalc/README.md)
+- [开局一下八字奇门问事工具站 MVP](tool-sites/baziqimen/README.md)
