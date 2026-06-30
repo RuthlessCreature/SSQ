@@ -3,15 +3,18 @@ const formatMoney = (value) => `$${Math.max(0, value).toLocaleString(undefined, 
 })}`;
 
 const numberValue = (form, name, fallback = 0) => {
-  const field = form.elements[name];
+  const field = form.querySelector(`[name="${name}"]`);
   const value = Number.parseFloat(field ? field.value : "");
   return Number.isFinite(value) ? value : fallback;
 };
 
+const ceilUnits = (value, unit = 1) => Math.ceil((value - 1e-9) / Math.max(unit, 1e-9));
+
 const getToolLabel = (tool) => ({
   paint: "Paint calculator",
   tile: "Tile calculator",
-  curtain: "Curtain calculator"
+  curtain: "Curtain calculator",
+  flooring: "Flooring calculator"
 }[tool] || "Home calculator");
 
 function paintResult(form) {
@@ -26,7 +29,7 @@ function paintResult(form) {
   const wallArea = Math.max(0, 2 * (length + width) * height - openings);
   const paintArea = wallArea * coats;
   const gallons = coverage > 0 ? paintArea / coverage : 0;
-  const buckets = Math.ceil(gallons / Math.max(bucketGallons, .1));
+  const buckets = ceilUnits(gallons, Math.max(bucketGallons, .1));
   const budget = buckets * bucketPrice;
   return {
     title: "Paint estimate",
@@ -50,8 +53,8 @@ function tileResult(form) {
   const boxPrice = numberValue(form, "boxPrice", 36);
   const tileArea = Math.max(.01, tileWidth * tileHeight / 144);
   const adjustedArea = area * (1 + waste / 100);
-  const pieces = Math.ceil(adjustedArea / tileArea);
-  const boxes = Math.ceil(pieces / Math.max(1, boxCount));
+  const pieces = ceilUnits(adjustedArea, tileArea);
+  const boxes = ceilUnits(pieces, Math.max(1, boxCount));
   const budget = boxes * boxPrice;
   return {
     title: "Tile estimate",
@@ -77,7 +80,7 @@ function curtainResult(form) {
   const rodWidth = windowWidth + sideReturn * 2;
   const fabricWidth = rodWidth * fullness;
   const panelLength = windowHeight + dropExtra;
-  const panels = Math.ceil(fabricWidth / Math.max(1, panelWidth));
+  const panels = ceilUnits(fabricWidth, Math.max(1, panelWidth));
   const yards = panels * panelLength / 36;
   const budget = yards * pricePerYard;
   return {
@@ -90,6 +93,30 @@ function curtainResult(form) {
       ["Fabric budget", formatMoney(budget)]
     ],
     summary: `Use around ${panels} panel${panels === 1 ? "" : "s"} at ${fullness}x fullness. Round up for pattern matching or shrinkage.`
+  };
+}
+
+function flooringResult(form) {
+  const length = numberValue(form, "length", 15);
+  const width = numberValue(form, "width", 12);
+  const waste = numberValue(form, "waste", 10);
+  const boxCoverage = numberValue(form, "boxCoverage", 22);
+  const boxPrice = numberValue(form, "boxPrice", 58);
+  const baseArea = Math.max(0, length * width);
+  const adjustedArea = baseArea * (1 + waste / 100);
+  const boxes = ceilUnits(adjustedArea, Math.max(.1, boxCoverage));
+  const purchasedCoverage = boxes * boxCoverage;
+  const budget = boxes * boxPrice;
+  return {
+    title: "Flooring estimate",
+    metrics: [
+      ["Room floor area", `${baseArea.toFixed(1)} sq ft`],
+      ["Area with waste", `${adjustedArea.toFixed(1)} sq ft`],
+      ["Box coverage", `${boxCoverage.toFixed(1)} sq ft`],
+      ["Boxes to buy", `${boxes} box${boxes === 1 ? "" : "es"}`],
+      ["Material budget", formatMoney(budget)]
+    ],
+    summary: `Buy about ${boxes} box${boxes === 1 ? "" : "es"} for ${purchasedCoverage.toFixed(1)} sq ft of listed coverage. Increase waste for diagonal layouts, narrow closets, or products that may be hard to reorder.`
   };
 }
 
@@ -112,7 +139,9 @@ function calculate(form) {
     ? paintResult(form)
     : tool === "tile"
       ? tileResult(form)
-      : curtainResult(form);
+      : tool === "curtain"
+        ? curtainResult(form)
+        : flooringResult(form);
   const resultCard = document.querySelector(`[data-result-for="${tool}"]`);
   renderResult(resultCard, result);
   window.__lastHomeCalcResult = { tool, result };

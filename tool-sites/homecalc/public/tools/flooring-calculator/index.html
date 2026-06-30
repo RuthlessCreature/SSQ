@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flooring Calculator | Boxes, Waste, and Budget</title>
+  <meta name="description" content="Estimate flooring square footage, waste allowance, boxes to buy, purchased coverage, and material budget.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/flooring-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260630-content">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav">
+      <a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a>
+      <div class="nav-links">
+        <a href="/tools/paint-calculator/">Paint</a>
+        <a href="/tools/tile-calculator/">Tile</a>
+        <a href="/tools/flooring-calculator/">Flooring</a>
+        <a href="/tools/curtain-calculator/">Curtains</a>
+        <a href="/guides/">Guides</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="shell">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">Flooring calculator</p>
+        <h1>Estimate flooring boxes before you order.</h1>
+        <p class="lead">Convert room dimensions into square footage, add waste, round up to full boxes, and estimate the material budget before comparing flooring products.</p>
+      </div>
+      <img src="/assets/material-strip.svg" alt="Flooring samples, tile, fabric, and measuring tape on a workbench">
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <h2>Room and flooring inputs</h2>
+        <form class="calculator" data-tool="flooring">
+          <div class="field"><label>Room length (ft)</label><input name="length" type="number" min="1" step="0.1" value="15"></div>
+          <div class="field"><label>Room width (ft)</label><input name="width" type="number" min="1" step="0.1" value="12"></div>
+          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label>Coverage per box (sq ft)</label><input name="boxCoverage" type="number" min="0.1" step="0.1" value="22"></div>
+          <div class="field wide"><label>Price per box</label><input name="boxPrice" type="number" min="0" step="1" value="58"></div>
+          <div class="button-row">
+            <button type="submit">Calculate flooring</button>
+            <button class="secondary" type="button" data-download-result>Download result card</button>
+            <button class="secondary" type="button" data-share-page>Copy share link</button>
+          </div>
+        </form>
+        <p class="note">Tip: 5-10% waste can work for simple rectangular rooms. Use 10-15% for angled rooms, closets, hallways, stairs, or plank layouts with many cuts.</p>
+      </div>
+
+      <aside class="result-card" data-result-for="flooring">
+        <p class="eyebrow">Estimate</p>
+        <h2 data-result-title>Flooring estimate</h2>
+        <div class="result-main" data-result-metrics></div>
+        <p class="note" data-result-summary></p>
+      </aside>
+    </section>
+
+    <section class="content-section">
+      <div class="panel">
+        <h2>How this flooring estimate is calculated</h2>
+        <p>The calculator multiplies room length by room width to get base square footage, then adds a waste allowance for cuts, layout direction, damaged boards, closets, and future repairs. Because most flooring is sold by the carton, the adjusted square footage is rounded up to full boxes.</p>
+        <p><strong>Formula:</strong> base area = length x width. Area to buy for = base area x (1 + waste rate). Boxes needed = area to buy for / listed box coverage, rounded up.</p>
+        <table class="info-table">
+          <thead><tr><th>Input</th><th>Why it matters</th><th>Practical note</th></tr></thead>
+          <tbody>
+            <tr><td>Room length and width</td><td>Sets the base square footage.</td><td>Measure the longest usable dimensions, then handle closets or alcoves separately if needed.</td></tr>
+            <tr><td>Waste allowance</td><td>Covers cuts, mistakes, pattern direction, and spare pieces.</td><td>Use a higher percentage for diagonal plank layouts or rooms with many turns.</td></tr>
+            <tr><td>Coverage per box</td><td>Converts square footage into purchasable cartons.</td><td>Use the exact coverage printed on the flooring box, not a rounded store shelf label.</td></tr>
+            <tr><td>Price per box</td><td>Creates the material-only budget.</td><td>Add underlayment, transitions, trim, adhesive, delivery, and tools separately.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="content-grid">
+        <div class="content-card">
+          <h2>Example: 15 ft by 12 ft room</h2>
+          <p>A 15 ft by 12 ft room has 180 sq ft of floor area. With a 10% waste allowance, the buying target becomes 198 sq ft. If one box covers 22 sq ft, the project needs 9 full boxes.</p>
+          <p>At $58 per box, the material estimate is $522 before underlayment, vapor barrier, transitions, stair nosing, trim, delivery, disposal, or installation labor.</p>
+        </div>
+        <div class="content-card">
+          <h2>When to calculate separately</h2>
+          <ul class="checklist">
+            <li>Closets, pantries, hallways, and alcoves that add extra cut lines.</li>
+            <li>Rooms connected by thresholds or transition strips.</li>
+            <li>Stairs, landings, or angled walls.</li>
+            <li>Different flooring products in adjacent spaces.</li>
+            <li>Products with directional grain, pattern repeat, or mixed plank lengths.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Planning note:</strong> This is a material quantity estimate. Confirm subfloor preparation, underlayment, expansion gaps, trim, and manufacturer installation rules before buying.
+      </div>
+      <div class="related-links">
+        <a class="button secondary" href="/guides/flooring-waste-calculator/">Flooring waste guide</a>
+        <a class="button secondary" href="/guides/how-to-measure-a-room/">Measurement guide</a>
+        <a class="button secondary" href="/guides/renovation-budget-mistakes/">Budget mistakes</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260630-content2"></script>
+</body>
+</html>

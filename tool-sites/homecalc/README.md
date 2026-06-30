@@ -29,10 +29,10 @@ wrangler pages deploy public --project-name=homecalc-xyz
 
 ## Before Ads
 
-Replace the placeholder publisher ID in:
+Verify the AdSense publisher ID before each review or launch pass:
 
 - `public/ads.txt`
-- page `<head>` comments if you enable AdSense code
+- page `<head>` AdSense script tags
 
 Also replace `homecalc.xyz` and `contact@homecalc.xyz` if you launch with a different domain.
 
