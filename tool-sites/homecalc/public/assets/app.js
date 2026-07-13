@@ -14,7 +14,13 @@ const getToolLabel = (tool) => ({
   paint: "Paint calculator",
   tile: "Tile calculator",
   curtain: "Curtain calculator",
-  flooring: "Flooring calculator"
+  flooring: "Flooring calculator",
+  drywall: "Drywall calculator",
+  wallpaper: "Wallpaper calculator",
+  concrete: "Concrete calculator",
+  mulch: "Mulch calculator",
+  deck: "Deck board calculator",
+  baseboard: "Baseboard trim calculator"
 }[tool] || "Home calculator");
 
 function paintResult(form) {
@@ -120,6 +126,152 @@ function flooringResult(form) {
   };
 }
 
+function drywallResult(form) {
+  const length = numberValue(form, "length", 12);
+  const width = numberValue(form, "width", 10);
+  const height = numberValue(form, "height", 8);
+  const openings = numberValue(form, "openings", 45);
+  const waste = numberValue(form, "waste", 10);
+  const sheetWidth = numberValue(form, "sheetWidth", 4);
+  const sheetHeight = numberValue(form, "sheetHeight", 8);
+  const sheetPrice = numberValue(form, "sheetPrice", 15);
+  const wallArea = Math.max(0, 2 * (length + width) * height - openings);
+  const adjustedArea = wallArea * (1 + waste / 100);
+  const sheetArea = Math.max(.1, sheetWidth * sheetHeight);
+  const sheets = ceilUnits(adjustedArea, sheetArea);
+  const budget = sheets * sheetPrice;
+  return {
+    title: "Drywall estimate",
+    metrics: [
+      ["Wall area", `${wallArea.toFixed(0)} sq ft`],
+      ["Area with waste", `${adjustedArea.toFixed(0)} sq ft`],
+      ["Sheet coverage", `${sheetArea.toFixed(0)} sq ft`],
+      ["Sheets to buy", `${sheets} sheet${sheets === 1 ? "" : "s"}`],
+      ["Panel budget", formatMoney(budget)]
+    ],
+    summary: `Plan for about ${sheets} sheet${sheets === 1 ? "" : "s"}. Add separate budget for joint compound, tape, corner bead, screws, sanding supplies, and primer.`
+  };
+}
+
+function wallpaperResult(form) {
+  const wallLength = numberValue(form, "wallLength", 36);
+  const wallHeight = numberValue(form, "wallHeight", 8);
+  const openings = numberValue(form, "openings", 45);
+  const waste = numberValue(form, "waste", 15);
+  const rollCoverage = numberValue(form, "rollCoverage", 56);
+  const rollPrice = numberValue(form, "rollPrice", 38);
+  const wallArea = Math.max(0, wallLength * wallHeight - openings);
+  const adjustedArea = wallArea * (1 + waste / 100);
+  const rolls = ceilUnits(adjustedArea, Math.max(.1, rollCoverage));
+  const budget = rolls * rollPrice;
+  return {
+    title: "Wallpaper estimate",
+    metrics: [
+      ["Wall area", `${wallArea.toFixed(0)} sq ft`],
+      ["Area with pattern waste", `${adjustedArea.toFixed(0)} sq ft`],
+      ["Roll coverage", `${rollCoverage.toFixed(0)} sq ft`],
+      ["Rolls to buy", `${rolls} roll${rolls === 1 ? "" : "s"}`],
+      ["Wallpaper budget", formatMoney(budget)]
+    ],
+    summary: `Buy about ${rolls} roll${rolls === 1 ? "" : "s"}. Increase waste for large pattern repeats, half-drop patterns, short walls, or discontinued wallpaper.`
+  };
+}
+
+function concreteResult(form) {
+  const length = numberValue(form, "length", 10);
+  const width = numberValue(form, "width", 8);
+  const thickness = numberValue(form, "thickness", 4);
+  const waste = numberValue(form, "waste", 10);
+  const bagYield = numberValue(form, "bagYield", .6);
+  const bagPrice = numberValue(form, "bagPrice", 6);
+  const volume = Math.max(0, length * width * thickness / 12);
+  const adjustedVolume = volume * (1 + waste / 100);
+  const bags = ceilUnits(adjustedVolume, Math.max(.01, bagYield));
+  const budget = bags * bagPrice;
+  return {
+    title: "Concrete estimate",
+    metrics: [
+      ["Concrete volume", `${volume.toFixed(1)} cu ft`],
+      ["Volume with waste", `${adjustedVolume.toFixed(1)} cu ft`],
+      ["Cubic yards", `${(adjustedVolume / 27).toFixed(2)} cu yd`],
+      ["Bags to buy", `${bags} bag${bags === 1 ? "" : "s"}`],
+      ["Bag budget", formatMoney(budget)]
+    ],
+    summary: `Plan for about ${bags} bag${bags === 1 ? "" : "s"} using the listed bag yield. For larger pours, compare bag cost against ready-mix delivery.`
+  };
+}
+
+function mulchResult(form) {
+  const area = numberValue(form, "area", 240);
+  const depth = numberValue(form, "depth", 3);
+  const bagVolume = numberValue(form, "bagVolume", 2);
+  const bagPrice = numberValue(form, "bagPrice", 4);
+  const volume = Math.max(0, area * depth / 12);
+  const bags = ceilUnits(volume, Math.max(.01, bagVolume));
+  const budget = bags * bagPrice;
+  return {
+    title: "Mulch estimate",
+    metrics: [
+      ["Bed area", `${area.toFixed(0)} sq ft`],
+      ["Mulch volume", `${volume.toFixed(1)} cu ft`],
+      ["Cubic yards", `${(volume / 27).toFixed(2)} cu yd`],
+      ["Bags to buy", `${bags} bag${bags === 1 ? "" : "s"}`],
+      ["Mulch budget", formatMoney(budget)]
+    ],
+    summary: `Buy about ${bags} bag${bags === 1 ? "" : "s"} for ${depth.toFixed(1)} in depth. Keep mulch away from siding, stems, trunks, and weep holes.`
+  };
+}
+
+function deckResult(form) {
+  const deckLength = numberValue(form, "deckLength", 16);
+  const deckWidth = numberValue(form, "deckWidth", 12);
+  const boardWidth = numberValue(form, "boardWidth", 5.5);
+  const gap = numberValue(form, "gap", .125);
+  const boardLength = numberValue(form, "boardLength", 16);
+  const waste = numberValue(form, "waste", 10);
+  const boardPrice = numberValue(form, "boardPrice", 22);
+  const rows = ceilUnits(deckWidth * 12, Math.max(.1, boardWidth + gap));
+  const linearFeet = rows * deckLength;
+  const adjustedLinearFeet = linearFeet * (1 + waste / 100);
+  const boards = ceilUnits(adjustedLinearFeet, Math.max(.1, boardLength));
+  const budget = boards * boardPrice;
+  return {
+    title: "Deck board estimate",
+    metrics: [
+      ["Board rows", `${rows} row${rows === 1 ? "" : "s"}`],
+      ["Base linear footage", `${linearFeet.toFixed(0)} ft`],
+      ["Linear footage with waste", `${adjustedLinearFeet.toFixed(0)} ft`],
+      ["Boards to buy", `${boards} board${boards === 1 ? "" : "s"}`],
+      ["Board budget", formatMoney(budget)]
+    ],
+    summary: `Plan for about ${boards} board${boards === 1 ? "" : "s"}. Add framing, fasteners, railing, stairs, blocking, flashing, and delivery separately.`
+  };
+}
+
+function baseboardResult(form) {
+  const length = numberValue(form, "length", 12);
+  const width = numberValue(form, "width", 10);
+  const openings = numberValue(form, "openings", 6);
+  const waste = numberValue(form, "waste", 10);
+  const pieceLength = numberValue(form, "pieceLength", 8);
+  const piecePrice = numberValue(form, "piecePrice", 14);
+  const perimeter = Math.max(0, 2 * (length + width) - openings);
+  const adjustedLength = perimeter * (1 + waste / 100);
+  const pieces = ceilUnits(adjustedLength, Math.max(.1, pieceLength));
+  const budget = pieces * piecePrice;
+  return {
+    title: "Baseboard estimate",
+    metrics: [
+      ["Net perimeter", `${perimeter.toFixed(1)} ft`],
+      ["Length with waste", `${adjustedLength.toFixed(1)} ft`],
+      ["Piece length", `${pieceLength.toFixed(0)} ft`],
+      ["Pieces to buy", `${pieces} piece${pieces === 1 ? "" : "s"}`],
+      ["Trim budget", formatMoney(budget)]
+    ],
+    summary: `Buy about ${pieces} piece${pieces === 1 ? "" : "s"} of trim. Add extra for scarf joints, outside corners, mistakes, and future repairs.`
+  };
+}
+
 function renderResult(container, result) {
   container.querySelector("[data-result-title]").textContent = result.title;
   container.querySelector("[data-result-summary]").textContent = result.summary;
@@ -135,13 +287,19 @@ function renderResult(container, result) {
 
 function calculate(form) {
   const tool = form.dataset.tool;
-  const result = tool === "paint"
-    ? paintResult(form)
-    : tool === "tile"
-      ? tileResult(form)
-      : tool === "curtain"
-        ? curtainResult(form)
-        : flooringResult(form);
+  const calculators = {
+    paint: paintResult,
+    tile: tileResult,
+    curtain: curtainResult,
+    flooring: flooringResult,
+    drywall: drywallResult,
+    wallpaper: wallpaperResult,
+    concrete: concreteResult,
+    mulch: mulchResult,
+    deck: deckResult,
+    baseboard: baseboardResult
+  };
+  const result = (calculators[tool] || flooringResult)(form);
   const resultCard = document.querySelector(`[data-result-for="${tool}"]`);
   renderResult(resultCard, result);
   window.__lastHomeCalcResult = { tool, result };

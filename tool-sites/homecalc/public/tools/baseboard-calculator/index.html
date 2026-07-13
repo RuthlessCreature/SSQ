@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Baseboard Calculator | Trim Length, Pieces, Waste, and Budget</title>
+  <meta name="description" content="Estimate baseboard trim length, pieces to buy, waste allowance, openings, and material budget for a room.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/baseboard-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260713-expansion">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell">
+    <section class="page-head"><div><p class="eyebrow">Baseboard calculator</p><h1>Estimate baseboard trim pieces for a room.</h1><p class="lead">Convert room perimeter into trim length, subtract openings, add waste, and round up to full pieces.</p></div><img src="/assets/material-strip.svg" alt="Trim, paint, tile, and measuring tape samples"></section>
+    <section class="layout">
+      <div class="panel">
+        <h2>Room and trim inputs</h2>
+        <form class="calculator" data-tool="baseboard">
+          <div class="field"><label>Room length (ft)</label><input name="length" type="number" min="1" step="0.1" value="12"></div>
+          <div class="field"><label>Room width (ft)</label><input name="width" type="number" min="1" step="0.1" value="10"></div>
+          <div class="field"><label>Door/opening width total (ft)</label><input name="openings" type="number" min="0" step="0.1" value="6"></div>
+          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label>Trim piece length (ft)</label><input name="pieceLength" type="number" min="1" step="1" value="8"></div>
+          <div class="field"><label>Price per piece</label><input name="piecePrice" type="number" min="0" step="1" value="14"></div>
+          <div class="button-row"><button type="submit">Calculate baseboard</button><button class="secondary" type="button" data-download-result>Download result card</button><button class="secondary" type="button" data-share-page>Copy share link</button></div>
+        </form>
+        <p class="note">Tip: add more waste when the room has many corners, long walls that need scarf joints, painted returns, or profiles that may be hard to match later.</p>
+      </div>
+      <aside class="result-card" data-result-for="baseboard"><p class="eyebrow">Estimate</p><h2 data-result-title>Baseboard estimate</h2><div class="result-main" data-result-metrics></div><p class="note" data-result-summary></p></aside>
+    </section>
+    <section class="content-section"><div class="panel">
+      <h2>How this baseboard estimate is calculated</h2>
+      <p>The calculator starts with room perimeter, subtracts the total width of doorways and openings that do not need baseboard, then adds a waste allowance. The result is divided by piece length and rounded up to full trim pieces.</p>
+      <p><strong>Formula:</strong> net perimeter = 2 x (length + width) - openings. Trim to buy = net perimeter x (1 + waste rate). Pieces = trim to buy / piece length, rounded up.</p>
+      <table class="info-table"><thead><tr><th>Input</th><th>Why it matters</th><th>Planning note</th></tr></thead><tbody><tr><td>Room dimensions</td><td>Set the basic perimeter.</td><td>Measure along the wall line, not through furniture.</td></tr><tr><td>Openings</td><td>Reduce trim length.</td><td>Do not subtract areas where returns or casing need extra trim.</td></tr><tr><td>Piece length</td><td>Controls the number of purchasable boards.</td><td>Longer boards can reduce joints but may cost more to transport.</td></tr><tr><td>Waste</td><td>Covers miter cuts, mistakes, and future repairs.</td><td>Use more for complex profiles and rooms with many corners.</td></tr></tbody></table>
+      <div class="callout"><strong>Finish note:</strong> include caulk, nail filler, primer, paint, adhesive, finish nails, coping or miter tools, and touch-up supplies outside the trim-piece budget.</div>
+      <div class="related-links"><a class="button secondary" href="/guides/baseboard-measuring-guide/">Baseboard measuring guide</a><a class="button secondary" href="/guides/caulk-calculator-guide/">Caulk planning guide</a><a class="button secondary" href="/tools/paint-calculator/">Paint calculator</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260713-expansion"></script>
+</body>
+</html>

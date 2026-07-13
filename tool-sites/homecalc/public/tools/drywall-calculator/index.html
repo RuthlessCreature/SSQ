@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Drywall Calculator | Sheets, Waste, and Panel Budget</title>
+  <meta name="description" content="Estimate drywall wall area, sheet count, waste allowance, sheet coverage, and panel budget before buying drywall.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/drywall-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260713-expansion">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell">
+    <section class="page-head"><div><p class="eyebrow">Drywall calculator</p><h1>Estimate drywall sheets before ordering panels.</h1><p class="lead">Calculate wall area, subtract openings, add waste, and round up to full drywall sheets for a material-only planning budget.</p></div><img src="/assets/material-strip.svg" alt="Home improvement materials and measuring tape"></section>
+    <section class="layout">
+      <div class="panel">
+        <h2>Room and sheet inputs</h2>
+        <form class="calculator" data-tool="drywall">
+          <div class="field"><label>Room length (ft)</label><input name="length" type="number" min="1" step="0.1" value="12"></div>
+          <div class="field"><label>Room width (ft)</label><input name="width" type="number" min="1" step="0.1" value="10"></div>
+          <div class="field"><label>Wall height (ft)</label><input name="height" type="number" min="1" step="0.1" value="8"></div>
+          <div class="field"><label>Doors/windows area (sq ft)</label><input name="openings" type="number" min="0" step="1" value="45"></div>
+          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label>Sheet width (ft)</label><input name="sheetWidth" type="number" min="1" step="0.1" value="4"></div>
+          <div class="field"><label>Sheet height (ft)</label><input name="sheetHeight" type="number" min="1" step="0.1" value="8"></div>
+          <div class="field"><label>Price per sheet</label><input name="sheetPrice" type="number" min="0" step="1" value="15"></div>
+          <div class="button-row"><button type="submit">Calculate drywall</button><button class="secondary" type="button" data-download-result>Download result card</button><button class="secondary" type="button" data-share-page>Copy share link</button></div>
+        </form>
+        <p class="note">Tip: drywall projects also need screws, tape, joint compound, corner bead, sanding supplies, primer, and sometimes moisture-resistant or fire-rated panels.</p>
+      </div>
+      <aside class="result-card" data-result-for="drywall"><p class="eyebrow">Estimate</p><h2 data-result-title>Drywall estimate</h2><div class="result-main" data-result-metrics></div><p class="note" data-result-summary></p></aside>
+    </section>
+    <section class="content-section">
+      <div class="panel">
+        <h2>How this drywall estimate is calculated</h2>
+        <p>The calculator starts with wall area: room perimeter multiplied by wall height, minus the area of doors and windows. It then adds a waste allowance for cutoffs, mistakes, damaged corners, and layout decisions. The adjusted area is divided by sheet coverage and rounded up because drywall is sold as full panels.</p>
+        <p><strong>Formula:</strong> wall area = 2 x (length + width) x height - openings. Area to buy = wall area x (1 + waste rate). Sheets = area to buy / sheet coverage, rounded up.</p>
+        <table class="info-table"><thead><tr><th>Input</th><th>Why it matters</th><th>Planning note</th></tr></thead><tbody><tr><td>Room dimensions</td><td>Set the wall surface before openings.</td><td>Measure each room separately if heights vary.</td></tr><tr><td>Openings</td><td>Large doors and windows reduce panel area.</td><td>Do not subtract tiny openings if they create extra cuts.</td></tr><tr><td>Sheet size</td><td>Changes coverage and seam layout.</td><td>4x8, 4x10, and 4x12 sheets can produce different waste.</td></tr><tr><td>Waste</td><td>Covers cutoffs and handling damage.</td><td>Use more for closets, angled ceilings, and many small walls.</td></tr></tbody></table>
+        <div class="callout"><strong>Planning note:</strong> This estimate covers panels only. Finishing level, texture, moisture exposure, fire rating, ceiling work, and local code requirements can change material needs.</div>
+        <div class="related-links"><a class="button secondary" href="/guides/drywall-sheet-size-guide/">Sheet size guide</a><a class="button secondary" href="/guides/drywall-joint-compound-guide/">Joint compound guide</a><a class="button secondary" href="/tools/paint-calculator/">Paint calculator</a></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260713-expansion"></script>
+</body>
+</html>

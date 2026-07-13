@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concrete Calculator | Slab Volume, Bags, Cubic Yards, and Budget</title>
+  <meta name="description" content="Estimate concrete slab volume, cubic yards, bag count, waste allowance, and bag budget from slab dimensions.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/concrete-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260713-expansion">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell">
+    <section class="page-head"><div><p class="eyebrow">Concrete calculator</p><h1>Estimate concrete bags or cubic yards for a slab.</h1><p class="lead">Enter slab length, width, thickness, waste allowance, bag yield, and price to plan a small concrete material budget.</p></div><img src="/assets/material-strip.svg" alt="Home project material samples and measuring tape"></section>
+    <section class="layout">
+      <div class="panel">
+        <h2>Slab and bag inputs</h2>
+        <form class="calculator" data-tool="concrete">
+          <div class="field"><label>Slab length (ft)</label><input name="length" type="number" min="0.1" step="0.1" value="10"></div>
+          <div class="field"><label>Slab width (ft)</label><input name="width" type="number" min="0.1" step="0.1" value="8"></div>
+          <div class="field"><label>Thickness (in)</label><input name="thickness" type="number" min="0.5" step="0.25" value="4"></div>
+          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label>Yield per bag (cu ft)</label><input name="bagYield" type="number" min="0.01" step="0.01" value="0.6"></div>
+          <div class="field"><label>Price per bag</label><input name="bagPrice" type="number" min="0" step="0.5" value="6"></div>
+          <div class="button-row"><button type="submit">Calculate concrete</button><button class="secondary" type="button" data-download-result>Download result card</button><button class="secondary" type="button" data-share-page>Copy share link</button></div>
+        </form>
+        <p class="note">Tip: this calculator is best for small pads, posts, steps, and repair pours. Large pours often need ready-mix pricing and site-specific preparation.</p>
+      </div>
+      <aside class="result-card" data-result-for="concrete"><p class="eyebrow">Estimate</p><h2 data-result-title>Concrete estimate</h2><div class="result-main" data-result-metrics></div><p class="note" data-result-summary></p></aside>
+    </section>
+    <section class="content-section"><div class="panel">
+      <h2>How this concrete estimate is calculated</h2>
+      <p>The calculator converts slab thickness from inches to feet, multiplies length by width by thickness, then adds a waste allowance. It shows both cubic feet and cubic yards because bagged concrete is often described by cubic-foot yield, while ready-mix is commonly quoted by cubic yards.</p>
+      <p><strong>Formula:</strong> volume = length x width x thickness in feet. Adjusted volume = volume x (1 + waste rate). Bags = adjusted volume / bag yield, rounded up.</p>
+      <table class="info-table"><thead><tr><th>Input</th><th>Why it matters</th><th>Planning note</th></tr></thead><tbody><tr><td>Thickness</td><td>Small changes create large volume changes.</td><td>Measure planned depth after base prep, not just surface height.</td></tr><tr><td>Waste</td><td>Covers uneven subbase, spillage, and low spots.</td><td>Use more when forms or subgrade are irregular.</td></tr><tr><td>Bag yield</td><td>Controls bag count.</td><td>Use the exact yield printed on the bag.</td></tr><tr><td>Cubic yards</td><td>Helps compare ready-mix.</td><td>Delivery minimums may dominate small orders.</td></tr></tbody></table>
+      <div class="callout"><strong>Safety note:</strong> concrete work can involve structural, drainage, frost, reinforcement, and code considerations. Use this tool for material planning only.</div>
+      <div class="related-links"><a class="button secondary" href="/guides/concrete-slab-estimate/">Slab estimate guide</a><a class="button secondary" href="/guides/concrete-bag-vs-ready-mix/">Bag vs ready-mix</a><a class="button secondary" href="/guides/home-project-supply-checklist/">Supply checklist</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260713-expansion"></script>
+</body>
+</html>

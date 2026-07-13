@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mulch Calculator | Bags, Cubic Feet, Cubic Yards, and Budget</title>
+  <meta name="description" content="Estimate mulch volume, bag count, cubic yards, and material budget from bed area and mulch depth.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/mulch-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260713-expansion">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell">
+    <section class="page-head"><div><p class="eyebrow">Mulch calculator</p><h1>Estimate mulch bags by bed area and depth.</h1><p class="lead">Calculate cubic feet, cubic yards, bags to buy, and a simple material budget for garden beds and landscape refreshes.</p></div><img src="/assets/material-strip.svg" alt="Home and garden material samples with measuring tape"></section>
+    <section class="layout">
+      <div class="panel">
+        <h2>Bed and bag inputs</h2>
+        <form class="calculator" data-tool="mulch">
+          <div class="field"><label>Bed area (sq ft)</label><input name="area" type="number" min="1" step="1" value="240"></div>
+          <div class="field"><label>Mulch depth (in)</label><input name="depth" type="number" min="0.5" step="0.5" value="3"></div>
+          <div class="field"><label>Bag volume (cu ft)</label><input name="bagVolume" type="number" min="0.1" step="0.1" value="2"></div>
+          <div class="field"><label>Price per bag</label><input name="bagPrice" type="number" min="0" step="0.5" value="4"></div>
+          <div class="button-row"><button type="submit">Calculate mulch</button><button class="secondary" type="button" data-download-result>Download result card</button><button class="secondary" type="button" data-share-page>Copy share link</button></div>
+        </form>
+        <p class="note">Tip: use a shallower top-up depth if existing mulch is still healthy. Avoid piling mulch against trunks, stems, siding, or foundation vents.</p>
+      </div>
+      <aside class="result-card" data-result-for="mulch"><p class="eyebrow">Estimate</p><h2 data-result-title>Mulch estimate</h2><div class="result-main" data-result-metrics></div><p class="note" data-result-summary></p></aside>
+    </section>
+    <section class="content-section"><div class="panel">
+      <h2>How this mulch estimate is calculated</h2>
+      <p>The calculator multiplies bed area by desired depth converted to feet. The result is mulch volume in cubic feet. It also converts to cubic yards because bulk mulch is often sold by the cubic yard, while store bags are commonly labeled in cubic feet.</p>
+      <p><strong>Formula:</strong> volume = area x depth / 12. Bags = volume / bag size, rounded up. Cubic yards = volume / 27.</p>
+      <table class="info-table"><thead><tr><th>Depth</th><th>Typical use</th><th>Planning note</th></tr></thead><tbody><tr><td>1-2 in</td><td>Refreshing existing beds.</td><td>Use when old mulch is still present.</td></tr><tr><td>2-3 in</td><td>Many annual mulch refreshes.</td><td>A common range for weed suppression and appearance.</td></tr><tr><td>3-4 in</td><td>New beds or bare soil.</td><td>Avoid burying crowns, trunks, or stems.</td></tr><tr><td>Bulk yardage</td><td>Large beds and full landscape refreshes.</td><td>Compare delivery cost against bag convenience.</td></tr></tbody></table>
+      <div class="callout"><strong>Landscape note:</strong> measure bed shapes as rectangles, circles, or rough sections, then combine areas. Curved beds often need a small extra allowance.</div>
+      <div class="related-links"><a class="button secondary" href="/guides/mulch-depth-guide/">Mulch depth guide</a><a class="button secondary" href="/guides/measuring-irregular-rooms/">Irregular area guide</a><a class="button secondary" href="/guides/weekend-diy-budget-planner/">Weekend budget planner</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260713-expansion"></script>
+</body>
+</html>

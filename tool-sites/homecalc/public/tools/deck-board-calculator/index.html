@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Deck Board Calculator | Board Rows, Linear Feet, and Budget</title>
+  <meta name="description" content="Estimate deck board rows, linear footage, board count, waste allowance, and decking material budget.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/deck-board-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260713-expansion">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell">
+    <section class="page-head"><div><p class="eyebrow">Deck board calculator</p><h1>Estimate deck boards before pricing lumber.</h1><p class="lead">Plan board rows, linear footage, waste, board count, and material budget for simple rectangular decking layouts.</p></div><img src="/assets/material-strip.svg" alt="Home project material samples and measuring tape"></section>
+    <section class="layout">
+      <div class="panel">
+        <h2>Deck and board inputs</h2>
+        <form class="calculator" data-tool="deck">
+          <div class="field"><label>Deck length (ft)</label><input name="deckLength" type="number" min="1" step="0.1" value="16"></div>
+          <div class="field"><label>Deck width (ft)</label><input name="deckWidth" type="number" min="1" step="0.1" value="12"></div>
+          <div class="field"><label>Board face width (in)</label><input name="boardWidth" type="number" min="1" step="0.1" value="5.5"></div>
+          <div class="field"><label>Gap between boards (in)</label><input name="gap" type="number" min="0" step="0.01" value="0.125"></div>
+          <div class="field"><label>Board length (ft)</label><input name="boardLength" type="number" min="1" step="1" value="16"></div>
+          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field wide"><label>Price per board</label><input name="boardPrice" type="number" min="0" step="1" value="22"></div>
+          <div class="button-row"><button type="submit">Calculate deck boards</button><button class="secondary" type="button" data-download-result>Download result card</button><button class="secondary" type="button" data-share-page>Copy share link</button></div>
+        </form>
+        <p class="note">Tip: this is a decking-board estimate only. Framing, beams, posts, railing, stairs, fasteners, flashing, permits, and structural design are separate.</p>
+      </div>
+      <aside class="result-card" data-result-for="deck"><p class="eyebrow">Estimate</p><h2 data-result-title>Deck board estimate</h2><div class="result-main" data-result-metrics></div><p class="note" data-result-summary></p></aside>
+    </section>
+    <section class="content-section"><div class="panel">
+      <h2>How this deck board estimate is calculated</h2>
+      <p>The calculator estimates how many board rows fit across the deck width using board face width plus the planned gap. It multiplies row count by deck length to get base linear footage, adds waste, then divides by board length and rounds up.</p>
+      <p>This method is most useful for simple rectangular decks with boards running the full deck length. Picture-frame borders, breaker boards, diagonal decking, stairs, and complex layouts need a separate takeoff.</p>
+      <table class="info-table"><thead><tr><th>Input</th><th>Why it matters</th><th>Planning note</th></tr></thead><tbody><tr><td>Board width</td><td>Controls number of rows.</td><td>Use actual face width, not nominal lumber size.</td></tr><tr><td>Gap</td><td>Changes coverage across the deck.</td><td>Follow product and drainage guidance.</td></tr><tr><td>Board length</td><td>Controls final board count.</td><td>Choose available lengths before pricing.</td></tr><tr><td>Waste</td><td>Covers cuts, defects, and layout choices.</td><td>Increase for diagonal, border, or staggered layouts.</td></tr></tbody></table>
+      <div class="callout"><strong>Structural note:</strong> this calculator does not design a deck. Confirm span tables, joist spacing, fastener requirements, railing loads, footings, and permits locally.</div>
+      <div class="related-links"><a class="button secondary" href="/guides/deck-board-spacing-guide/">Board spacing guide</a><a class="button secondary" href="/guides/material-waste-cheat-sheet/">Waste cheat sheet</a><a class="button secondary" href="/guides/home-project-supply-checklist/">Supply checklist</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260713-expansion"></script>
+</body>
+</html>

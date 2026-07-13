@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wallpaper Calculator | Rolls, Pattern Waste, and Budget</title>
+  <meta name="description" content="Estimate wallpaper wall area, pattern waste, roll count, roll coverage, and wallpaper budget before ordering.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/wallpaper-calculator/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260713-expansion">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell">
+    <section class="page-head"><div><p class="eyebrow">Wallpaper calculator</p><h1>Estimate wallpaper rolls with pattern waste.</h1><p class="lead">Plan wall area, openings, repeat waste, roll coverage, and material budget before ordering wallpaper.</p></div><img src="/assets/material-strip.svg" alt="Fabric, paper, tile, and measuring tape samples"></section>
+    <section class="layout">
+      <div class="panel">
+        <h2>Wall and roll inputs</h2>
+        <form class="calculator" data-tool="wallpaper">
+          <div class="field"><label>Total wall length (ft)</label><input name="wallLength" type="number" min="1" step="0.1" value="36"></div>
+          <div class="field"><label>Wall height (ft)</label><input name="wallHeight" type="number" min="1" step="0.1" value="8"></div>
+          <div class="field"><label>Doors/windows area (sq ft)</label><input name="openings" type="number" min="0" step="1" value="45"></div>
+          <div class="field"><label>Pattern/waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="15"></div>
+          <div class="field"><label>Coverage per roll (sq ft)</label><input name="rollCoverage" type="number" min="1" step="1" value="56"></div>
+          <div class="field"><label>Price per roll</label><input name="rollPrice" type="number" min="0" step="1" value="38"></div>
+          <div class="button-row"><button type="submit">Calculate wallpaper</button><button class="secondary" type="button" data-download-result>Download result card</button><button class="secondary" type="button" data-share-page>Copy share link</button></div>
+        </form>
+        <p class="note">Tip: wallpaper roll coverage varies by product. Pattern repeat can reduce usable coverage, so use the seller's usable coverage when available.</p>
+      </div>
+      <aside class="result-card" data-result-for="wallpaper"><p class="eyebrow">Estimate</p><h2 data-result-title>Wallpaper estimate</h2><div class="result-main" data-result-metrics></div><p class="note" data-result-summary></p></aside>
+    </section>
+    <section class="content-section"><div class="panel">
+      <h2>How this wallpaper estimate is calculated</h2>
+      <p>The calculator multiplies total wall length by wall height, subtracts openings, then adds a pattern and waste allowance. The adjusted area is divided by coverage per roll and rounded up. This gives an early buying estimate, not a hanging plan.</p>
+      <p>Wallpaper is more sensitive to pattern than paint. A straight match, drop match, large motif, or short wall can create more unusable offcuts than a plain paper. If the product page gives usable coverage after repeat matching, use that value instead of the theoretical roll area.</p>
+      <table class="info-table"><thead><tr><th>Decision</th><th>Why it matters</th><th>Practical note</th></tr></thead><tbody><tr><td>Total wall length</td><td>Sets the coverage span.</td><td>Add all walls receiving the same paper.</td></tr><tr><td>Openings</td><td>Subtracts large unused areas.</td><td>Keep some allowance because cuts around openings still consume paper.</td></tr><tr><td>Pattern waste</td><td>Accounts for repeat matching and trimming.</td><td>Large repeats may need more than 15%.</td></tr><tr><td>Roll coverage</td><td>Controls final roll count.</td><td>Use seller guidance when it differs from simple square footage.</td></tr></tbody></table>
+      <div class="callout"><strong>Buying note:</strong> order from the same batch or dye lot when possible. Wallpaper bought later may vary slightly, even if the pattern name is the same.</div>
+      <div class="related-links"><a class="button secondary" href="/guides/wallpaper-rolls-guide/">Roll buying guide</a><a class="button secondary" href="/guides/wallpaper-pattern-repeat-guide/">Pattern repeat guide</a><a class="button secondary" href="/guides/how-to-measure-a-room/">Measurement guide</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+  <script src="/assets/app.js?v=20260713-expansion"></script>
+</body>
+</html>
