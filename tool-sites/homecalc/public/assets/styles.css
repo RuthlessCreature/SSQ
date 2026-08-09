@@ -395,6 +395,29 @@ button:hover,
   margin-top: 18px;
 }
 
+.faq-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.faq-list details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  padding: 12px 14px;
+}
+
+.faq-list summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.faq-list p {
+  margin: 10px 0 0;
+}
+
 .legal-block {
   padding: 22px;
   max-width: 850px;

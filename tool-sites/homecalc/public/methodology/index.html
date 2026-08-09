@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How HomeCalc Tools Builds Material Estimates</title>
+  <meta name="description" content="Learn how HomeCalc Tools calculates material estimates, handles rounding and waste, maintains guides, and corrects calculator assumptions.">
+  <link rel="canonical" href="https://homecalc.xyz/methodology/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260809-content">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "name": "How HomeCalc Tools Builds Material Estimates",
+      "url": "https://homecalc.xyz/methodology/",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "HomeCalc Tools",
+        "url": "https://homecalc.xyz/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div></nav></header>
+  <main class="shell article">
+    <section class="page-head">
+      <div>
+        <p class="eyebrow">Methodology</p>
+        <h1>How HomeCalc Tools builds material estimates.</h1>
+        <p class="lead">Every calculator is designed to show the path from a measurement to a purchase-oriented estimate. This page explains the formulas, rounding, assumptions, editorial maintenance, and limits behind the site.</p>
+      </div>
+      <img src="/assets/material-strip.svg" alt="Measuring tape, paint, tile, fabric, and flooring samples">
+    </section>
+
+    <section class="content-section"><div class="panel">
+      <h2>What the site is for</h2>
+      <p>HomeCalc Tools helps with the early planning stage of a home project: the moment when you know the dimensions of a room, wall, window, bed, or slab and need a defensible starting quantity for materials. The site converts those measurements into practical buying units such as gallons, boxes, sheets, rolls, boards, bags, and yards. It also explains what commonly changes the number before a purchase is made.</p>
+      <p>The site is deliberately narrow. It does not quote contractor pricing, choose a structural assembly, approve a waterproofing detail, or tell a visitor that a project is safe. A material estimate can support a store conversation or budget draft; it cannot replace product instructions, a site inspection, local requirements, or qualified advice where the work demands it.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>How calculator formulas are chosen</h2>
+      <p>Each calculator uses a visible, plain-language relationship between measurements and material quantity. Paint begins with wall area, which is room perimeter multiplied by wall height, less large openings. Flooring begins with floor area, then adds a waste allowance before rounding to whole cartons. Concrete converts thickness to feet, calculates volume, and reports both cubic feet and cubic yards. Curtain and wallpaper tools use finished dimensions, fullness or strip yield, and product-specific allowances rather than treating a window or wall as a simple rectangle only.</p>
+      <p>We keep formulas understandable because an estimate must be checkable. A visitor should be able to identify the input that changed a result: room length, wall height, product coverage, panel size, pattern repeat, stock length, or allowance. Where an input depends on a selected product, the page tells the visitor to use the exact label, package, or manufacturer guidance instead of a generic average.</p>
+      <table class="info-table">
+        <thead><tr><th>Material family</th><th>Base measurement</th><th>Purchase conversion</th></tr></thead>
+        <tbody>
+          <tr><td>Paint and drywall</td><td>Wall surface area, adjusted for major openings</td><td>Coverage per gallon or per sheet, then rounded to full containers or panels</td></tr>
+          <tr><td>Tile and flooring</td><td>Finished floor or wall area</td><td>Waste allowance, actual carton coverage, then whole cartons</td></tr>
+          <tr><td>Wallpaper and curtains</td><td>Strip, rod, and finished-drop dimensions</td><td>Roll yield, pattern allowance, fullness, panels, or fabric yards</td></tr>
+          <tr><td>Concrete, mulch, boards, and trim</td><td>Volume, row coverage, linear footage, or net perimeter</td><td>Bag yield, cubic yards, board length, or trim-piece length</td></tr>
+        </tbody>
+      </table>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>Why results are rounded up</h2>
+      <p>Stores sell whole cartons, sheets, boards, rolls, and containers. A calculated 8.1 cartons cannot be purchased as 8.1 cartons, so the calculator rounds to the next full unit. That rounding is shown as part of the output because it is different from waste. Waste represents expected cuts, breakage, offcuts, pattern matching, or a repair reserve. Package rounding represents the purchasing unit selected by the manufacturer or retailer.</p>
+      <p>Keeping those ideas separate helps visitors make better choices. A project might have a modest installation allowance but still need one extra carton because of carton coverage. Conversely, a special-order pattern or complex layout might need more material before package rounding. When an estimate lands close to a package boundary, the guides recommend checking return rules and the value of matching repair material rather than trying to purchase the theoretical minimum.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>How HomeCalc treats waste and uncertainty</h2>
+      <p>There is no single waste percentage that works for every job. Open, straight layouts can reuse more offcuts than bathrooms, stairs, borders, diagonal tile, wallpaper with a large repeat, or trim with many outside corners. The guides explain the physical source of the allowance so a visitor can decide whether it matches the room. A number is more useful when it can be revised after the layout or product changes.</p>
+      <p>The same principle applies to uncertainty. Surface condition, delivery access, wall geometry, substrate preparation, and local product availability can change a project in ways a browser calculator cannot observe. Each tool includes a scope boundary, and the site asks visitors to pause when a project includes structural loads, water management, active damage, electrical systems, plumbing, fire ratings, permits, or hazardous materials.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>How guides are maintained</h2>
+      <p>Guides are written as practical planning documents: a measurement workflow, a worked scenario, decision conditions, common errors, and a clear limitation. They are not product endorsements and do not accept payment to change formula assumptions or editorial recommendations. The goal is to help visitors make the next measurement or store decision more accurately, not to promise a final installed result.</p>
+      <p>When a reader reports an unclear formula, product-label mismatch, broken link, or calculation issue, the review starts with the page URL, the inputs used, the selected product details, and the expected result. If the explanation or formula needs change, the page is updated and its review date is refreshed. Feedback can be sent through the <a href="/contact/">contact page</a>.</p>
+      <p>HomeCalc Tools does not claim trade credentials that it does not have. Where an answer depends on an installer, supplier, engineer, code official, or manufacturer, the page says so directly. That is a useful limit, not a missing feature.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>How to check an estimate before buying</h2>
+      <ol class="method-list">
+        <li>Keep the room sketch and raw dimensions with the calculation.</li>
+        <li>Record the exact material package, coverage, yield, board length, or pattern repeat used as an input.</li>
+        <li>Write down the allowance and its reason, such as cuts, layout, breakage, or repair stock.</li>
+        <li>Compare the adjusted result with full purchasing units and the retailer's return policy.</li>
+        <li>Read the product instructions and obtain appropriate project-specific guidance before starting specialized work.</li>
+      </ol>
+      <div class="callout"><strong>Review status:</strong> This methodology was reviewed on August 9, 2026. It describes the planning role of HomeCalc Tools and does not turn any calculator into a professional quote or specification.</div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Planning estimates with visible assumptions.</span><span><a href="/methodology/">Methodology</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a><a href="/contact/">Contact</a></span></div></footer>
+</body>
+</html>
