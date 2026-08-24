@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <title>Flooring Calculator | Boxes, Waste, and Budget</title>
   <meta name="description" content="Estimate flooring square footage, waste allowance, boxes to buy, purchased coverage, and material budget.">
   <link rel="canonical" href="https://homecalc.xyz/tools/flooring-calculator/">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260809-content">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/styles.css?v=20260824-focus">
 </head>
 <body>
   <header class="topbar">
     <nav class="nav">
       <a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a>
-      <div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div>
+      <div class="nav-links"><a href="/tools/">Core tools</a><a href="/records/">Planning records</a><a href="/methodology/">Method</a><a href="/about/">About</a></div>
     </nav>
   </header>
 
@@ -31,11 +31,11 @@
       <div class="panel">
         <h2>Room and flooring inputs</h2>
         <form class="calculator" data-tool="flooring">
-          <div class="field"><label>Room length (ft)</label><input name="length" type="number" min="1" step="0.1" value="15"></div>
-          <div class="field"><label>Room width (ft)</label><input name="width" type="number" min="1" step="0.1" value="12"></div>
-          <div class="field"><label>Waste allowance (%)</label><input name="waste" type="number" min="0" step="1" value="10"></div>
-          <div class="field"><label>Coverage per box (sq ft)</label><input name="boxCoverage" type="number" min="0.1" step="0.1" value="22"></div>
-          <div class="field wide"><label>Price per box</label><input name="boxPrice" type="number" min="0" step="1" value="58"></div>
+          <div class="field"><label for="length">Room length (ft)</label><input id="length" name="length" type="number" min="1" step="0.1" value="15"></div>
+          <div class="field"><label for="width">Room width (ft)</label><input id="width" name="width" type="number" min="1" step="0.1" value="12"></div>
+          <div class="field"><label for="waste">Waste allowance (%)</label><input id="waste" name="waste" type="number" min="0" step="1" value="10"></div>
+          <div class="field"><label for="boxCoverage">Coverage per box (sq ft)</label><input id="boxCoverage" name="boxCoverage" type="number" min="0.1" step="0.1" value="22"></div>
+          <div class="field wide"><label for="boxPrice">Price per box</label><input id="boxPrice" name="boxPrice" type="number" min="0" step="1" value="58"></div>
           <div class="button-row">
             <button type="submit">Calculate flooring</button>
             <button class="secondary" type="button" data-download-result>Download result card</button>
@@ -91,54 +91,11 @@
         <strong>Planning note:</strong> This is a material quantity estimate. Confirm subfloor preparation, underlayment, expansion gaps, trim, and manufacturer installation rules before buying.
       </div>
       <div class="related-links">
-        <a class="button secondary" href="/guides/flooring-waste-calculator/">Flooring waste guide</a>
-        <a class="button secondary" href="/guides/how-to-measure-a-room/">Measurement guide</a>
-        <a class="button secondary" href="/guides/renovation-budget-mistakes/">Budget mistakes</a>
+        <a class="button secondary" href="/records/flooring-order-record/">Read the flooring order record</a>
+        <a class="button secondary" href="/methodology/">Check method and limits</a>
       </div>
     </section>
-  <section class="content-section editorial-expansion" data-editorial-version="20260809">
-<div class="panel">
-<p class="eyebrow">Field workflow</p>
-<h2>Turn a calculator result into a reliable flooring order</h2>
-<p>Boxed flooring is sold by coverage, while the work creates offcuts, directional constraints, and transition details. The calculator gives a floor-area order estimate; the layout plan tells you whether the waste allowance is realistic.</p>
-<h3>Measure before you price</h3>
-<ol class="method-list"><li>Measure the finished floor footprint wall to wall and identify closets, alcoves, halls, and bays. Draw them on a quick plan rather than measuring through them as if the room were a perfect rectangle.</li><li>Choose the board direction before setting waste. Long planks run with the long dimension or light direction for visual reasons, but transitions, joist direction, and manufacturer rules may control the final choice.</li><li>Use the carton coverage from the exact product, not a store category average. Different thicknesses, mixed-length boxes, and plank widths can change the coverage and the number of full cartons needed.</li><li>Add an allowance for starting and ending cuts, obstacles, rejected boards, and repair stock. Complex rooms, continuous runs through doorways, stairs, and diagonal installation usually need more planning material.</li><li>List the non-flooring items separately: underlayment, vapor barrier, adhesive, transitions, stair nosing, trim, fasteners, delivery, removal, and subfloor preparation.</li></ol>
-<h3>Worked planning scenario</h3>
-<p>A 15 by 12 foot bedroom is 180 square feet before waste. That number is only the beginning. If the selected carton covers 22 square feet, a 10 percent planning allowance produces 198 square feet, which rounds to nine cartons. Now check the doorway, closet, and direction of the first row. If the room connects to a hall or has a diagonal wall, a small additional reserve may be more sensible than trying to finish with a single short board left in an opened box.</p>
-<h3>How to read the result</h3>
-<p>The carton total should support a clear install plan. It is not a recommendation to buy every accessory from the same budget line. When the result is close to a carton boundary, compare the cost of one extra carton against the risk of a discontinued product or a mismatched future repair. Unopened cartons may be returnable, but only confirm that policy before purchase.</p>
-<h3>Conditions that change the order</h3>
-<table class="info-table"><thead><tr><th>Condition</th><th>What changes</th><th>Why it matters</th></tr></thead><tbody>
-<tr><td>Simple rectangular room</td><td>Use floor area plus a modest cut allowance after confirming plank direction.</td><td>Keep at least a few boards from the order for repairs.</td></tr><tr><td>Closets and hallways</td><td>Measure each extension and include its extra start and end cuts.</td><td>Small add-on spaces can use disproportionate waste.</td></tr><tr><td>Continuous multi-room run</td><td>Plan the whole field, transitions, and expansion breaks before combining areas.</td><td>A single product may still require separate installation zones.</td></tr><tr><td>Stairs or angled layout</td><td>Create a separate takeoff and use a more conservative allowance.</td><td>Carton coverage alone does not describe stair parts or diagonal cuts.</td></tr>
-</tbody></table>
-<h3>Before checkout</h3>
-<ul class="checklist"><li>Verify exact carton coverage, product batch, acclimation instructions, and return conditions.</li><li>Measure all transitions and confirm whether matching strips are available.</li><li>Check subfloor moisture, flatness, and repair needs before material delivery.</li><li>Include trims, reducers, adhesive or underlayment, and removal/disposal in the budget.</li><li>Reserve spare boards in a climate-appropriate, labeled location.</li></ul>
-<div class="callout"><strong>Scope boundary:</strong> The calculation estimates purchase quantity only. It does not validate substrate conditions, moisture limits, expansion gaps, sound control requirements, or manufacturer installation instructions.</div>
-<p class="note">Editorially maintained by HomeCalc Tools. Reviewed August 9, 2026. Calculator outputs are planning estimates and should be checked against the exact product, layout, and site conditions.</p>
-</div>
-</section>
-  <section class="content-section editorial-supplement" data-editorial-supplement="20260809">
-<div class="panel">
-<p class="eyebrow">Use the estimate well</p>
-<h2>Keep the flooring calculator connected to the real job</h2>
-<p>A useful calculator is a record of a specific room, material, layout, and date. Write down the measurements, product package size, coverage or yield, and any allowance you selected. Without that record, a number copied into a shopping cart becomes hard to check when a wall changes, a carton has different coverage, or the selected product is out of stock.</p>
-<p>The result should be revised whenever the assumptions change. That is not a failure of the original calculation; it is how an early planning estimate stays honest. Keep the first version, note what changed, and compare the new purchase quantity with the exact package sizes and return policy before ordering.</p>
-<h3>Recheck the estimate when any of these change</h3>
-<ul class="checklist">
-<li>The measured surface gains or loses an opening, alcove, border, closet, or separate material zone.</li>
-<li>The layout changes direction, pattern, joint spacing, strip height, board length, or finished termination point.</li>
-<li>The product package, usable coverage, yield, repeat, actual dimension, or installation instructions differ from the first assumption.</li>
-<li>The site inspection reveals repairs, uneven surfaces, moisture, access limits, or a condition that adds preparation or waste.</li>
-<li>The estimate sits close to the next carton, roll, panel, bucket, or stock-length boundary.</li>
-</ul>
-<h3>Three questions before you place an order</h3>
-<div class="faq-list">
-<details><summary>What number should I bring to the store?</summary><p>Bring the raw measured quantity, the allowance and why you chose it, the adjusted quantity, and the final number of purchasable units. A store associate or installer can help check a transparent estimate; they cannot reliably check a single unexplained total.</p></details>
-<details><summary>Should I always buy extra?</summary><p>Buy a reasoned reserve for cuts, package rounding, defects, and repairs, not an arbitrary pile of material. The value of same-batch spare material is higher when a product is special order, patterned, dyed, discontinued, or difficult to match.</p></details>
-<details><summary>When should I stop and ask for help?</summary><p>Pause when the work involves structural loading, waterproofing, drainage, electrical systems, plumbing, fire ratings, permits, hazardous materials, or an active building failure. Material quantity is not a substitute for a safe scope of work.</p></details>
-</div>
-</div>
-</section>
+
   </main>
 
   <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>

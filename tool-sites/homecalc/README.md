@@ -1,54 +1,42 @@
 # HomeCalc Tools
 
-Static Cloudflare Pages site for home improvement calculators and planning guides.
+Static Cloudflare Pages site for transparent interior material takeoffs.
 
-The public site includes calculators for:
+## Active library
+
+The search-facing site is deliberately limited to four maintained calculators and four worked planning records:
 
 - paint
 - tile
 - flooring
 - drywall
-- wallpaper
-- concrete
-- mulch
-- deck boards
-- baseboard trim
-- curtains
 
-It also includes a guide library covering measurement, material waste, primer, finish, grout, wallpaper repeat, drywall finishing, project supplies, and budget planning.
+Each active calculator exposes the product-specific assumptions that affect the purchase quantity. The accompanying records use clearly marked illustrative scenarios to show raw measurements, allowances, package rounding, and scope limits. Older URLs are retained for link continuity but marked `noindex,follow` until they are independently rewritten or retired.
 
-## Local Preview
+## Local preview
 
-Open:
-
-```text
-tool-sites/homecalc/public/index.html
-```
-
-or serve it locally:
-
-```bash
+```powershell
 cd tool-sites/homecalc
-python3 -m http.server 8788 --directory public
+py -3 -m http.server 8788 --directory public
 ```
 
-## Deploy With Wrangler
+Then open `http://127.0.0.1:8788/`.
 
-```bash
+## Deploy with Wrangler
+
+```powershell
 cd tool-sites/homecalc
-npm install -g wrangler
-wrangler login
-wrangler pages project create homecalc-xyz
-wrangler pages deploy public --project-name=homecalc-xyz
+npx wrangler pages deploy public --project-name=homecalc-xyz
 ```
 
-## Before Ads
+## Review checklist
 
-Verify the AdSense publisher ID before each review or launch pass:
+Before a search or ad-quality review, verify that:
 
-- `public/ads.txt`
-- page `<head>` AdSense script tags
+- `public/sitemap.xml` contains only pages in the active library.
+- Unmaintained legacy pages carry `noindex,follow` and are absent from the main navigation.
+- Calculator results use the exact product coverage, carton coverage, or sheet dimensions provided by the reader.
+- Every active record labels constructed examples as illustrative and links to `/methodology/`.
+- `public/ads.txt`, contact information, privacy terms, and the disclaimer remain reachable.
 
-Also replace `homecalc.xyz` and `contact@homecalc.xyz` if you launch with a different domain.
-
-Before submitting the site for ad review, run local link checks, verify `sitemap.xml`, and use the SOP in `docs/2026-05-05-cloudflare-tool-site-sop.md`.
+The site currently does not load ad units. Reintroduce an AdSense script or units only after approval and only on pages that continue to meet the editorial standard.

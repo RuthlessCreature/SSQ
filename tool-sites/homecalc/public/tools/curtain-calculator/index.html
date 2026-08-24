@@ -3,17 +3,18 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <meta name="robots" content="noindex,follow">
   <title>Curtain Calculator | Fullness, Rod Width, Panels, and Fabric</title>
   <meta name="description" content="Estimate curtain rod width, fabric fullness, panel length, panel count, fabric yards, and budget.">
   <link rel="canonical" href="https://homecalc.xyz/tools/curtain-calculator/">
-  <link rel="stylesheet" href="/assets/styles.css?v=20260809-content">
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8433474721209734" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="/assets/styles.css?v=20260824-focus">
 </head>
 <body>
   <header class="topbar">
     <nav class="nav">
       <a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a>
-      <div class="nav-links"><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/about/">About</a><a href="/contact/">Contact</a></div>
+      <div class="nav-links"><a href="/tools/">Core tools</a><a href="/records/">Planning records</a><a href="/methodology/">Method</a><a href="/about/">About</a></div>
     </nav>
   </header>
 
@@ -31,13 +32,13 @@
       <div class="panel">
         <h2>Window and fabric inputs</h2>
         <form class="calculator" data-tool="curtain">
-          <div class="field"><label>Window width (in)</label><input name="windowWidth" type="number" min="1" step="0.1" value="72"></div>
-          <div class="field"><label>Window height (in)</label><input name="windowHeight" type="number" min="1" step="0.1" value="60"></div>
-          <div class="field"><label>Fullness multiplier</label><input name="fullness" type="number" min="1" step="0.1" value="2"></div>
-          <div class="field"><label>Side return each side (in)</label><input name="sideReturn" type="number" min="0" step="0.5" value="8"></div>
-          <div class="field"><label>Extra drop (in)</label><input name="dropExtra" type="number" min="0" step="0.5" value="6"></div>
-          <div class="field"><label>Fabric panel width (in)</label><input name="panelWidth" type="number" min="1" step="1" value="54"></div>
-          <div class="field wide"><label>Price per fabric yard</label><input name="pricePerYard" type="number" min="0" step="1" value="22"></div>
+          <div class="field"><label for="windowWidth">Window width (in)</label><input id="windowWidth" name="windowWidth" type="number" min="1" step="0.1" value="72"></div>
+          <div class="field"><label for="windowHeight">Window height (in)</label><input id="windowHeight" name="windowHeight" type="number" min="1" step="0.1" value="60"></div>
+          <div class="field"><label for="fullness">Fullness multiplier</label><input id="fullness" name="fullness" type="number" min="1" step="0.1" value="2"></div>
+          <div class="field"><label for="sideReturn">Side return each side (in)</label><input id="sideReturn" name="sideReturn" type="number" min="0" step="0.5" value="8"></div>
+          <div class="field"><label for="dropExtra">Extra drop (in)</label><input id="dropExtra" name="dropExtra" type="number" min="0" step="0.5" value="6"></div>
+          <div class="field"><label for="panelWidth">Fabric panel width (in)</label><input id="panelWidth" name="panelWidth" type="number" min="1" step="1" value="54"></div>
+          <div class="field wide"><label for="pricePerYard">Price per fabric yard</label><input id="pricePerYard" name="pricePerYard" type="number" min="0" step="1" value="22"></div>
           <div class="button-row">
             <button type="submit">Calculate curtains</button>
             <button class="secondary" type="button" data-download-result>Download result card</button>
@@ -98,49 +99,7 @@
         <a class="button secondary" href="/guides/renovation-budget-mistakes/">Budget mistakes</a>
       </div>
     </section>
-  <section class="content-section editorial-expansion" data-editorial-version="20260809">
-<div class="panel">
-<p class="eyebrow">Field workflow</p>
-<h2>Turn a calculator result into a reliable curtain order</h2>
-<p>Curtains are bought for the rod and finished look, not simply the window glass. The usable width includes the rod beyond the frame, and the fabric quantity changes sharply with fullness, lining, pattern repeat, and finished length.</p>
-<h3>Measure before you price</h3>
-<ol class="method-list"><li>Decide whether the treatment is inside-mounted, outside-mounted, ceiling-mounted, or wall-mounted. Measure the rod location and intended stack space, not only the glass or the window frame.</li><li>Add side return and overhang so the fabric can cover the opening while open and closed. Wide rods often need center support, and the hardware projection affects how the panels hang.</li><li>Choose a fullness target before counting panels. A tailored drape may use less fabric, while sheers, pinch pleats, lined panels, and formal rooms often need more width to look intentional.</li><li>Measure finished drop from the top of the rod or ring location to sill, apron, or floor. Add hem allowance, header construction, shrinkage, and pattern matching when buying cut fabric.</li><li>Separate ready-made panel shopping from custom fabric calculations. Seller dimensions describe finished panels, while yardage must account for seams, headers, hems, and fabric direction.</li></ol>
-<h3>Worked planning scenario</h3>
-<p>A 72 inch window with an eight inch extension on each side needs an 88 inch rod. At two-times fullness, the fabric target is 176 inches wide. Four 54 inch fabric widths give enough working width once seams are considered, but the panel length still depends on where the rod sits and whether the curtains finish at the sill or floor. A large pattern repeat or blackout lining can change the yardage meaningfully even though the finished window is unchanged.</p>
-<h3>How to read the result</h3>
-<p>Read the panel count as a visual planning number. Before ordering, inspect the seller's finished width, whether the stated width is per panel or per pair, and how the heading uses that width. For custom sewing, treat the yardage as a preliminary quantity until the workroom confirms the fabric repeat, usable width, hem, and header requirements.</p>
-<h3>Conditions that change the order</h3>
-<table class="info-table"><thead><tr><th>Condition</th><th>What changes</th><th>Why it matters</th></tr></thead><tbody>
-<tr><td>Ready-made grommet panels</td><td>Compare the stated finished panel width with the rod width and desired fullness.</td><td>A pair can look sparse when its combined width only matches the rod.</td></tr><tr><td>Custom fabric panels</td><td>Use usable fabric width, finished length, seams, hems, and header construction.</td><td>Fabric yardage is not the same as finished panel area.</td></tr><tr><td>Blackout or lined drapery</td><td>Allow for lining, extra weight, and a suitable rod or track.</td><td>Lining affects both construction and the way fabric folds.</td></tr><tr><td>Patterned fabric</td><td>Check the vertical repeat before committing to yardage.</td><td>Each joined panel may need extra length to align motifs.</td></tr>
-</tbody></table>
-<h3>Before checkout</h3>
-<ul class="checklist"><li>Measure the rod, brackets, side returns, and stack-back space before choosing panel width.</li><li>Confirm finished dimensions, header style, hardware compatibility, and cleaning instructions.</li><li>Decide whether the room needs privacy, blackout performance, insulation, or a purely decorative layer.</li><li>For washable fabric, account for expected shrinkage before cutting or hemming.</li><li>Order a small sample when color, texture, opacity, or pattern scale matters.</li></ul>
-<div class="callout"><strong>Scope boundary:</strong> This estimator does not replace a workroom specification. Motorized tracks, unusual bay windows, very heavy fabrics, and complex treatments need product-specific hardware and sewing guidance.</div>
-<p class="note">Editorially maintained by HomeCalc Tools. Reviewed August 9, 2026. Calculator outputs are planning estimates and should be checked against the exact product, layout, and site conditions.</p>
-</div>
-</section>
-  <section class="content-section editorial-supplement" data-editorial-supplement="20260809">
-<div class="panel">
-<p class="eyebrow">Use the estimate well</p>
-<h2>Keep the curtain calculator connected to the real job</h2>
-<p>A useful calculator is a record of a specific room, material, layout, and date. Write down the measurements, product package size, coverage or yield, and any allowance you selected. Without that record, a number copied into a shopping cart becomes hard to check when a wall changes, a carton has different coverage, or the selected product is out of stock.</p>
-<p>The result should be revised whenever the assumptions change. That is not a failure of the original calculation; it is how an early planning estimate stays honest. Keep the first version, note what changed, and compare the new purchase quantity with the exact package sizes and return policy before ordering.</p>
-<h3>Recheck the estimate when any of these change</h3>
-<ul class="checklist">
-<li>The measured surface gains or loses an opening, alcove, border, closet, or separate material zone.</li>
-<li>The layout changes direction, pattern, joint spacing, strip height, board length, or finished termination point.</li>
-<li>The product package, usable coverage, yield, repeat, actual dimension, or installation instructions differ from the first assumption.</li>
-<li>The site inspection reveals repairs, uneven surfaces, moisture, access limits, or a condition that adds preparation or waste.</li>
-<li>The estimate sits close to the next carton, roll, panel, bucket, or stock-length boundary.</li>
-</ul>
-<h3>Three questions before you place an order</h3>
-<div class="faq-list">
-<details><summary>What number should I bring to the store?</summary><p>Bring the raw measured quantity, the allowance and why you chose it, the adjusted quantity, and the final number of purchasable units. A store associate or installer can help check a transparent estimate; they cannot reliably check a single unexplained total.</p></details>
-<details><summary>Should I always buy extra?</summary><p>Buy a reasoned reserve for cuts, package rounding, defects, and repairs, not an arbitrary pile of material. The value of same-batch spare material is higher when a product is special order, patterned, dyed, discontinued, or difficult to match.</p></details>
-<details><summary>When should I stop and ask for help?</summary><p>Pause when the work involves structural loading, waterproofing, drainage, electrical systems, plumbing, fire ratings, permits, hazardous materials, or an active building failure. Material quantity is not a substitute for a safe scope of work.</p></details>
-</div>
-</div>
-</section>
+
   </main>
 
   <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>

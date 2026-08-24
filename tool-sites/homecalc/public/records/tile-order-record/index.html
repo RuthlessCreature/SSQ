@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <title>Tile Order Record: Area, Cuts, and Carton Rounding | HomeCalc Tools</title>
+  <meta name="description" content="A transparent tile order record that separates finished coverage, layout waste, carton coverage, trim, and repair material.">
+  <link rel="canonical" href="https://homecalc.xyz/records/tile-order-record/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260824-focus">
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"Tile Order Record: Area, Cuts, and Carton Rounding","dateModified":"2026-08-24","author":{"@type":"Organization","name":"HomeCalc Tools"},"publisher":{"@type":"Organization","name":"HomeCalc Tools","url":"https://homecalc.xyz/"},"mainEntityOfPage":"https://homecalc.xyz/records/tile-order-record/"}
+  </script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Core tools</a><a href="/records/">Planning records</a><a href="/methodology/">Method</a><a href="/about/">About</a></div></nav></header>
+  <main class="shell article">
+    <section class="record-head">
+      <p class="eyebrow">Illustrative calculation record | Reviewed August 24, 2026</p>
+      <h1>A tile order is a layout decision disguised as square footage.</h1>
+      <p class="lead">This fictional bathroom-floor scenario shows why a net floor area and a carton count are only the beginning. It keeps field area, planned cuts, carton coverage, trim, and repair stock in separate decisions.</p>
+      <div class="record-meta"><span>Scenario: rectangular bathroom floor</span><span>Finish scope: field tile only</span><span>Output: whole cartons</span></div>
+    </section>
+
+    <section class="content-section"><div class="panel">
+      <h2>1. Record the tileable field, then state the omissions</h2>
+      <p>The sample room measures 7 ft 6 in by 8 ft 0 in. A 30 in by 21 in vanity footprint is excluded because it will remain fixed in place. The doorway is not subtracted: the tile still needs cuts and a finished edge in that zone. This record estimates field tile only; it does not attempt to calculate underlayment, waterproofing, mortar, grout, movement joints, edge trim, or transition profiles.</p>
+      <table class="info-table"><thead><tr><th>Component</th><th>Calculation</th><th>Area</th><th>Reason</th></tr></thead><tbody>
+        <tr><td>Gross room floor</td><td>7.5 ft x 8 ft</td><td>60.0 sq ft</td><td>Full finished floor footprint</td></tr>
+        <tr><td>Fixed vanity footprint</td><td>2.5 ft x 1.75 ft</td><td>-4.4 sq ft</td><td>No tile planned below this fixture</td></tr>
+        <tr><th colspan="2">Net field area</th><th>55.6 sq ft</th><th>Starting quantity, not final order</th></tr>
+      </tbody></table>
+      <p>The useful number is the 55.6 sq ft field area. It is neither rounded nor padded yet, so another person can challenge the vanity assumption without losing the rest of the calculation.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>2. Choose an allowance for the actual layout</h2>
+      <p>The chosen tile is a large-format rectangle with a straight layout. The room has four perimeter cut lines, a doorway interruption, and a vanity return. This is not a diagonal pattern, but it is also not an open room that can reuse every offcut. The record uses a 12% layout allowance: 55.6 x 1.12 = 62.27 sq ft.</p>
+      <p>That 12% is an explicit planning hypothesis, not a universal tile rule. A centered layout that leaves narrow perimeter strips, a diagonal pattern, a large pattern variation, or a product with limited replacement availability can justify a different decision. A simple square room with a forgiving tile size may justify less. Draw the dry layout or obtain installer input before changing the number.</p>
+      <table class="info-table"><thead><tr><th>Question</th><th>Answer in this record</th><th>Effect on quantity</th></tr></thead><tbody>
+        <tr><td>Does the layout turn diagonal?</td><td>No</td><td>No diagonal-cut allowance included</td></tr>
+        <tr><td>Are perimeter and doorway cuts required?</td><td>Yes</td><td>Included in the 12% layout allowance</td></tr>
+        <tr><td>Is trim supplied in the field-tile carton?</td><td>Unknown</td><td>Trim remains a separate product line</td></tr>
+        <tr><td>Is repair stock required?</td><td>Decide after carton rounding</td><td>Not silently mixed into layout waste</td></tr>
+      </tbody></table>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>3. Convert adjusted area to a carton decision</h2>
+      <p>Assume the exact carton being considered states 15.5 sq ft of coverage. Dividing 62.27 by 15.5 gives 4.02 cartons. Four cartons are mathematically short, so the purchase quantity is five cartons. The fifth carton creates 15.23 sq ft above the adjusted field quantity, but that is a consequence of carton size, not evidence that a 27% waste rate was planned.</p>
+      <div class="decision-table"><div><strong>Net field area</strong><span>55.6 sq ft</span></div><div><strong>Layout allowance</strong><span>12% = 6.67 sq ft</span></div><div><strong>Adjusted field quantity</strong><span>62.27 sq ft</span></div><div><strong>Carton coverage</strong><span>15.5 sq ft from the selected product</span></div><div><strong>Purchase result</strong><span>5 cartons = 77.5 sq ft</span></div></div>
+      <p>Before ordering, verify that coverage is based on the product's actual dimensions and its stated usable coverage, not the nominal size printed in a style name. Also ask whether cartons from the same production run are available. That operational check can matter more than reducing a fraction of a carton on paper.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>4. What this calculation cannot decide</h2>
+      <p>Square footage does not determine the correct substrate, waterproofing assembly, mortar, grout, layout line, or movement treatment. Those choices depend on the location, product instructions, existing conditions, and sometimes local requirements. The record intentionally leaves them outside the field-tile calculation rather than presenting a quantity estimate as an installation plan.</p>
+      <ul class="checklist"><li>Confirm each non-field item separately: trim pieces, transition, edge treatment, setting materials, grout, and any required system components.</li><li>Check actual tile dimensions and carton coverage at the supplier before relying on a saved estimate.</li><li>Revisit the allowance when the layout is centered, rotated, includes a border, or creates thin cuts.</li><li>Record the product identifier and production information needed for future matching before the job starts.</li><li>Seek project-specific advice for wet areas, substrate issues, or conditions beyond an early material order.</li></ul>
+      <div class="related-links"><a class="button" href="/tools/tile-calculator/">Run the tile calculator</a><a class="button secondary" href="/records/">All planning records</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Illustrative calculation record, not installation advice.</span><span><a href="/methodology/">Methodology</a><a href="/about/">About</a><a href="/contact/">Contact</a></span></div></footer>
+</body>
+</html>

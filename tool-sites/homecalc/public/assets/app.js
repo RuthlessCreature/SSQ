@@ -55,23 +55,23 @@ function tileResult(form) {
   const tileWidth = numberValue(form, "tileWidth", 12);
   const tileHeight = numberValue(form, "tileHeight", 24);
   const waste = numberValue(form, "waste", 10);
-  const boxCount = numberValue(form, "boxCount", 8);
+  const boxCoverage = numberValue(form, "boxCoverage", 16);
   const boxPrice = numberValue(form, "boxPrice", 36);
   const tileArea = Math.max(.01, tileWidth * tileHeight / 144);
   const adjustedArea = area * (1 + waste / 100);
   const pieces = ceilUnits(adjustedArea, tileArea);
-  const boxes = ceilUnits(pieces, Math.max(1, boxCount));
+  const boxes = ceilUnits(adjustedArea, Math.max(.1, boxCoverage));
   const budget = boxes * boxPrice;
   return {
     title: "Tile estimate",
     metrics: [
       ["Area with waste", `${adjustedArea.toFixed(1)} sq ft`],
-      ["Single tile area", `${tileArea.toFixed(2)} sq ft`],
       ["Tiles needed", `${pieces} pieces`],
+      ["Carton coverage", `${boxCoverage.toFixed(1)} sq ft`],
       ["Boxes to buy", `${boxes} boxes`],
       ["Material budget", formatMoney(budget)]
     ],
-    summary: `Plan for ${pieces} tiles, or ${boxes} boxes. Increase waste to 15% for diagonal layouts or rooms with many cuts.`
+    summary: `Plan for ${pieces} tiles, or ${boxes} boxes at the selected carton coverage. Revisit the allowance when the layout, cuts, or product changes.`
   };
 }
 

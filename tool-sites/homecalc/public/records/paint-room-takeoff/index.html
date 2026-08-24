@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <title>Paint Room Takeoff Record: From Wall Faces to Containers | HomeCalc Tools</title>
+  <meta name="description" content="A transparent paint takeoff record showing separate wall measurements, openings, primer and finish coats, product coverage, and container rounding.">
+  <link rel="canonical" href="https://homecalc.xyz/records/paint-room-takeoff/">
+  <link rel="stylesheet" href="/assets/styles.css?v=20260824-focus">
+  <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"Paint Room Takeoff Record: From Wall Faces to Containers","dateModified":"2026-08-24","author":{"@type":"Organization","name":"HomeCalc Tools"},"publisher":{"@type":"Organization","name":"HomeCalc Tools","url":"https://homecalc.xyz/"},"mainEntityOfPage":"https://homecalc.xyz/records/paint-room-takeoff/"}
+  </script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Core tools</a><a href="/records/">Planning records</a><a href="/methodology/">Method</a><a href="/about/">About</a></div></nav></header>
+  <main class="shell article">
+    <section class="record-head">
+      <p class="eyebrow">Illustrative calculation record | Reviewed August 24, 2026</p>
+      <h1>A paint order starts with wall faces, not room area.</h1>
+      <p class="lead">This constructed bedroom example follows one takeoff from a dimension sheet to an order quantity. It is designed to show the decision trail that a one-number paint estimate usually hides.</p>
+      <div class="record-meta"><span>Scenario: one rectangular bedroom</span><span>Finish scope: walls only</span><span>Output: containers, not a quote</span></div>
+    </section>
+
+    <section class="content-section"><div class="panel">
+      <h2>1. Define the surface before measuring it</h2>
+      <p>The scope is four bedroom walls. The ceiling, baseboard, door faces, closet interior, primer, and repairs are excluded from the finish-paint order. Those exclusions are important: using a single room measurement for several surfaces makes the result look precise while mixing materials that may have different products and coverage rates.</p>
+      <table class="info-table"><thead><tr><th>Wall face</th><th>Measured size</th><th>Gross area</th><th>Opening subtraction</th><th>Net finish area</th></tr></thead><tbody>
+        <tr><td>North</td><td>12 ft x 8 ft</td><td>96 sq ft</td><td>30 sq ft window</td><td>66 sq ft</td></tr>
+        <tr><td>South</td><td>12 ft x 8 ft</td><td>96 sq ft</td><td>21 sq ft door</td><td>75 sq ft</td></tr>
+        <tr><td>East</td><td>10 ft x 8 ft</td><td>80 sq ft</td><td>None</td><td>80 sq ft</td></tr>
+        <tr><td>West</td><td>10 ft x 8 ft</td><td>80 sq ft</td><td>15 sq ft window</td><td>65 sq ft</td></tr>
+        <tr><th colspan="4">Net wall area</th><th>286 sq ft</th></tr>
+      </tbody></table>
+      <p>The familiar perimeter shortcut gives the same gross wall area here: 2 x (12 + 10) x 8 = 352 sq ft. Recording faces separately is still preferable when a room has a sloped ceiling, partial-height wall, large opening, or accent wall, because the record can be changed without restarting the whole estimate.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>2. Treat primer and finish paint as different lines</h2>
+      <p>For this example, one repaired wall and several joint-compound patches need a primer decision. The record does not assume that a finish paint labelled as paint-and-primer will solve every substrate difference. Instead, it keeps a possible primer coat separate and uses the actual label coverage selected for each product.</p>
+      <table class="info-table"><thead><tr><th>Material line</th><th>Coverage area</th><th>Coats</th><th>Label coverage used</th><th>Theoretical gallons</th></tr></thead><tbody>
+        <tr><td>Spot primer, if required by the chosen system</td><td>48 sq ft of patches</td><td>1</td><td>250 sq ft/gal</td><td>0.19 gal</td></tr>
+        <tr><td>Wall finish paint</td><td>286 sq ft</td><td>2</td><td>350 sq ft/gal</td><td>1.63 gal</td></tr>
+      </tbody></table>
+      <p>For the finish line, the calculation is 286 x 2 / 350 = 1.63 gallons. The coverage number is an input, not a HomeCalc claim. A different paint, surface texture, color change, or product instruction should replace it before the number is used for buying.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>3. Make the purchasing choice visible</h2>
+      <p>Two 1-gallon containers cover the 1.63-gallon finish estimate. That leaves roughly 0.37 gallon before allowing for loading a roller, cutting in, touch-up reserve, or an unexpectedly porous repair. A 5-gallon container would create far more reserve than this one-room scope needs, so the record selects two 1-gallon containers, provided they can be tinted consistently and stored for touch-ups.</p>
+      <div class="decision-table"><div><strong>Raw finish estimate</strong><span>1.63 gal</span></div><div><strong>Package choice</strong><span>2 x 1 gal</span></div><div><strong>Deliberate reserve</strong><span>0.37 gal before job conditions</span></div><div><strong>Decision trigger</strong><span>Use a larger quantity only if the product label or a test area warrants it</span></div></div>
+      <p>This is package rounding, not a disguised waste percentage. If the wall condition changes, revise the coverage input or coat count first. Do not attach an arbitrary percentage to the final number just to make the order feel safer.</p>
+    </div></section>
+
+    <section class="content-section"><div class="panel">
+      <h2>4. Recalculate when the job changes</h2>
+      <ul class="checklist"><li>Add the ceiling as a separate line if it receives a different product or sheen.</li><li>Measure the closet interior separately rather than assuming it is included in the four-wall perimeter.</li><li>Use the lower end of the selected product label's coverage range when the wall is rough, heavily repaired, or changing from a dark color.</li><li>Keep the product name, color, sheen, label coverage, and tint batch with the measurement record so later touch-up decisions are explainable.</li><li>Pause for moisture, peeling coatings, suspected hazardous materials, or other surface failures. A quantity tool cannot diagnose those conditions.</li></ul>
+      <div class="callout"><strong>Why this record is useful:</strong> it gives a store associate or installer the raw wall area, the coat system, the coverage assumption, and the package choice. They can correct a specific input instead of guessing how a single paint total was produced.</div>
+      <div class="related-links"><a class="button" href="/tools/paint-calculator/">Run the paint calculator</a><a class="button secondary" href="/records/">All planning records</a></div>
+    </div></section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>Illustrative calculation record, not installation advice.</span><span><a href="/methodology/">Methodology</a><a href="/about/">About</a><a href="/contact/">Contact</a></span></div></footer>
+</body>
+</html>
