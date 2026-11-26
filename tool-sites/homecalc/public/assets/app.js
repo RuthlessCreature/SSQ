@@ -1,5 +1,5 @@
 const formatMoney = (value) => `$${Math.max(0, value).toLocaleString(undefined, {
-  maximumFractionDigits: 0
+  maximumFractionDigits: 2
 })}`;
 
 const numberValue = (form, name, fallback = 0) => {
@@ -32,7 +32,7 @@ function paintResult(form) {
   const coverage = numberValue(form, "coverage", 350);
   const bucketGallons = numberValue(form, "bucketGallons", 1);
   const bucketPrice = numberValue(form, "bucketPrice", 42);
-  const wallArea = Math.max(0, 2 * (length + width) * height - openings);
+  const wallArea = numberValue(form, "netWallArea", Math.max(0, 2 * (length + width) * height - openings));
   const paintArea = wallArea * coats;
   const gallons = coverage > 0 ? paintArea / coverage : 0;
   const buckets = ceilUnits(gallons, Math.max(bucketGallons, .1));
@@ -40,9 +40,9 @@ function paintResult(form) {
   return {
     title: "Paint estimate",
     metrics: [
-      ["Paintable wall area", `${wallArea.toFixed(0)} sq ft`],
-      ["Coverage to buy for", `${paintArea.toFixed(0)} sq ft`],
-      ["Estimated gallons", `${gallons.toFixed(1)} gal`],
+      ["Paintable wall area", `${wallArea.toFixed(2)} sq ft`],
+      ["Coverage to buy for", `${paintArea.toFixed(2)} sq ft`],
+      ["Estimated gallons", `${gallons.toFixed(2)} gal`],
       ["Buckets to buy", `${buckets} bucket${buckets === 1 ? "" : "s"}`],
       ["Material budget", formatMoney(budget)]
     ],
@@ -65,9 +65,9 @@ function tileResult(form) {
   return {
     title: "Tile estimate",
     metrics: [
-      ["Area with waste", `${adjustedArea.toFixed(1)} sq ft`],
+      ["Area with waste", `${adjustedArea.toFixed(2)} sq ft`],
       ["Tiles needed", `${pieces} pieces`],
-      ["Carton coverage", `${boxCoverage.toFixed(1)} sq ft`],
+      ["Carton coverage", `${boxCoverage.toFixed(2)} sq ft`],
       ["Boxes to buy", `${boxes} boxes`],
       ["Material budget", formatMoney(budget)]
     ],
@@ -135,7 +135,7 @@ function drywallResult(form) {
   const sheetWidth = numberValue(form, "sheetWidth", 4);
   const sheetHeight = numberValue(form, "sheetHeight", 8);
   const sheetPrice = numberValue(form, "sheetPrice", 15);
-  const wallArea = Math.max(0, 2 * (length + width) * height - openings);
+  const wallArea = numberValue(form, "netWallArea", Math.max(0, 2 * (length + width) * height - openings));
   const adjustedArea = wallArea * (1 + waste / 100);
   const sheetArea = Math.max(.1, sheetWidth * sheetHeight);
   const sheets = ceilUnits(adjustedArea, sheetArea);
@@ -143,8 +143,8 @@ function drywallResult(form) {
   return {
     title: "Drywall estimate",
     metrics: [
-      ["Wall area", `${wallArea.toFixed(0)} sq ft`],
-      ["Area with waste", `${adjustedArea.toFixed(0)} sq ft`],
+      ["Wall area", `${wallArea.toFixed(2)} sq ft`],
+      ["Area with waste", `${adjustedArea.toFixed(2)} sq ft`],
       ["Sheet coverage", `${sheetArea.toFixed(0)} sq ft`],
       ["Sheets to buy", `${sheets} sheet${sheets === 1 ? "" : "s"}`],
       ["Panel budget", formatMoney(budget)]
@@ -287,6 +287,21 @@ function renderResult(container, result) {
 
 function calculate(form) {
   const tool = form.dataset.tool;
+  const resultCard = document.querySelector(`[data-result-for="${tool}"]`);
+  if (["paint", "tile", "flooring", "drywall"].includes(tool)) {
+    const inputs = [...form.querySelectorAll('input[type="number"]')];
+    const invalid = inputs.find(input => !input.disabled && !input.validity.valid);
+    const grossWall = 2 * (numberValue(form, "length") + numberValue(form, "width")) * numberValue(form, "height");
+    const openings = form.elements.namedItem("openings");
+    const invalidOpenings = openings && !openings.disabled && numberValue(form, "openings") >= grossWall;
+    if (invalid || invalidOpenings) {
+      const summary = invalid ? "Enter a valid value for " + invalid.labels[0].textContent + "."
+        : "Opening area must be less than the gross wall area. Check the measurements and units.";
+      renderResult(resultCard, { title: "Check your inputs", metrics: [], summary });
+      window.__lastHomeCalcResult = undefined;
+      return;
+    }
+  }
   const calculators = {
     paint: paintResult,
     tile: tileResult,
@@ -300,7 +315,6 @@ function calculate(form) {
     baseboard: baseboardResult
   };
   const result = (calculators[tool] || flooringResult)(form);
-  const resultCard = document.querySelector(`[data-result-for="${tool}"]`);
   renderResult(resultCard, result);
   window.__lastHomeCalcResult = { tool, result };
 }
@@ -359,6 +373,23 @@ function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
 }
 
 document.querySelectorAll("form[data-tool]").forEach((form) => {
+  if (["paint", "tile", "flooring", "drywall"].includes(form.dataset.tool)) {
+    form.querySelectorAll('input[type="number"]:not([name="netWallArea"])').forEach(input => { input.required = true; });
+    form.querySelectorAll('[name="length"],[name="width"],[name="height"],[name="area"],[name="openings"],[name="coverage"],[name="boxCoverage"],[name="bucketGallons"]').forEach(input => { input.step = "any"; });
+    form.querySelectorAll('[name$="Price"]').forEach(input => { input.step = ".01"; });
+    const knownArea = form.elements.namedItem("netWallArea");
+    if (knownArea) {
+      const geometry = ["length", "width", "height", "openings"].map(name => form.elements.namedItem(name));
+      const updateMode = () => {
+        geometry.forEach(input => { input.disabled = knownArea.value !== "" || knownArea.validity.badInput; });
+      };
+      const example = { paint: ["#bedroom-finish", 286], drywall: ["#partition-faces", 214] }[form.dataset.tool];
+      if (example && location.hash === example[0]) knownArea.value = example[1];
+      knownArea.addEventListener("input", updateMode);
+      updateMode();
+    }
+    form.addEventListener("input", () => calculate(form));
+  }
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     calculate(form);

@@ -15,7 +15,7 @@
 <body>
   <header class="topbar"><nav class="nav"><a class="brand" href="/"><span class="brand-mark"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Core tools</a><a href="/records/">Planning records</a><a href="/methodology/">Method</a><a href="/about/">About</a></div></nav></header>
   <main class="shell article">
-    <section class="record-head"><p class="eyebrow">Methodology | Reviewed August 24, 2026</p><h1>Our standard is a calculation another person can challenge.</h1><p class="lead">HomeCalc Tools publishes focused material takeoffs for interior paint, tile, flooring, and drywall planning. This page explains what the tools calculate, what their examples represent, who is responsible for the content, and where the site stops.</p></section>
+    <section class="record-head"><p class="eyebrow">Updated November 26, 2026</p><h1>How HomeCalc calculates material orders</h1><p class="lead">Formulas, source specifications, example inputs and corrections for the HomeCalc material tools.</p></section>
 
     <section class="content-section"><div class="panel">
       <h2>1. The site has a narrow purpose</h2>
@@ -27,9 +27,9 @@
       <h2>2. Formula rules</h2>
       <table class="info-table"><thead><tr><th>Tool</th><th>Base quantity</th><th>Product-specific input</th><th>Purchase conversion</th></tr></thead><tbody>
         <tr><td>Paint</td><td>Wall faces or perimeter x height, less stated large openings</td><td>Coats, label coverage, container size</td><td>Gallons rounded to whole containers</td></tr>
-        <tr><td>Tile</td><td>Finished field area</td><td>Actual tile dimensions, pieces per carton</td><td>Layout allowance, then whole cartons</td></tr>
+        <tr><td>Tile</td><td>Finished field area</td><td>Label coverage per carton. Tile dimensions inform the quick tool's approximate piece count.</td><td>Layout allowance, then whole cartons</td></tr>
         <tr><td>Flooring</td><td>Finished floor areas recorded by room or zone</td><td>Exact carton coverage</td><td>Layout allowance, then whole cartons</td></tr>
-        <tr><td>Drywall</td><td>Wall faces less stated openings</td><td>Selected sheet dimensions</td><td>Preliminary layout check, allowance, then whole sheets</td></tr>
+        <tr><td>Drywall</td><td>Wall faces less stated openings</td><td>Selected sheet dimensions</td><td>Net area x allowance factor / sheet area, rounded up. A separate layout check can change the order.</td></tr>
       </tbody></table>
       <p>We prefer visible equations over hidden defaults. When a product determines coverage, size, yield, or minimum unit, the calculator asks the reader for the exact information. We do not represent a generic average as a fact about the reader's selected product.</p>
     </div></section>
@@ -42,7 +42,8 @@
 
     <section class="content-section"><div class="panel">
       <h2>4. How planning records are written</h2>
-      <p>Planning records are editorial calculation examples. The dimensions and product values in those records are constructed for demonstration and are labelled as illustrative. They are not reports of a completed customer project, independent lab tests, contractor experience, or a claim that a particular material will perform the same way in every setting.</p>
+      <p>Planning records are editorial calculation examples. Room dimensions, allowances and sample quotes are illustrative. When a product specification comes from a manufacturer, the record names the source and identifies the value used. Recheck the current product label and the supplier's own quote before purchase.</p>
+      <p>The <a href="/tools/material-order/">purchase worksheet</a> adds or deducts each rectangle, applies a layout allowance once and uses each candidate's carton coverage to round up independently. It reports the area above the allowance separately from material cost. Export the CSV to keep the measurements and carton details together.</p>
       <p>For each record, the publisher checks that the arithmetic can be reproduced from the tables, that the scenario says what it includes and excludes, that package rounding is shown, and that the page names limits outside a material takeoff. Assisted drafting and code-generation tools may be used in producing site content; HomeCalc Tools is responsible for the final published scope, arithmetic, and corrections. The site does not invent named authors, trade credentials, field tests, product endorsements, or first-hand installation claims.</p>
     </div></section>
 

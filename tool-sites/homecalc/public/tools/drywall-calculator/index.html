@@ -21,6 +21,7 @@
           <div class="field"><label for="width">Room width (ft)</label><input id="width" name="width" type="number" min="1" step="0.1" value="10"></div>
           <div class="field"><label for="height">Wall height (ft)</label><input id="height" name="height" type="number" min="1" step="0.1" value="8"></div>
           <div class="field"><label for="openings">Doors/windows area (sq ft)</label><input id="openings" name="openings" type="number" min="0" step="1" value="45"></div>
+          <div class="field wide"><label for="netWallArea">Measured net panel area (sq ft, optional)</label><input id="netWallArea" name="netWallArea" type="number" min="0.001" step="any" aria-describedby="drywall-net-area-note"><small id="drywall-net-area-note">Use the combined area of faces to be boarded after deducting openings. This replaces the room dimensions above.</small></div>
           <div class="field"><label for="waste">Waste allowance (%)</label><input id="waste" name="waste" type="number" min="0" step="1" value="10"></div>
           <div class="field"><label for="sheetWidth">Sheet width (ft)</label><input id="sheetWidth" name="sheetWidth" type="number" min="1" step="0.1" value="4"></div>
           <div class="field"><label for="sheetHeight">Sheet height (ft)</label><input id="sheetHeight" name="sheetHeight" type="number" min="1" step="0.1" value="8"></div>
@@ -44,6 +45,6 @@
 
   </main>
   <footer class="footer"><div class="footer-inner"><span>Planning estimates only.</span><span><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
-  <script src="/assets/app.js?v=20260809-content"></script>
+  <script src="/assets/app.js?v=20261126-orders"></script>
 </body>
 </html>

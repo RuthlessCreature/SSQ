@@ -120,6 +120,128 @@ a {
   max-width: 68ch;
 }
 
+.order-head h1 {
+  max-width: 25ch;
+}
+
+.room-figure {
+  max-width: 390px;
+  margin: 20px 0;
+}
+
+.room-figure figcaption {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.takeoff-sketch {
+  aspect-ratio: 15 / 16;
+  max-width: 260px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--ink);
+  background: #e8f4f1;
+  color: var(--ink);
+  font: 600 .8rem/1.1 system-ui, sans-serif;
+}
+
+.plan-vanity, .plan-door {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--ink);
+  background: #ffe6bc;
+}
+
+.plan-vanity {
+  inset: 0 auto auto 0;
+  width: 33.333%;
+  height: 21.875%;
+  border-width: 0 1px 1px 0;
+}
+
+.plan-door {
+  inset: auto 14% 0 auto;
+  padding: 4px;
+  border-bottom: 0;
+  background: #fff;
+}
+
+.order-section {
+  border-top: 1px solid var(--line);
+  padding-block: 22px;
+  margin-top: 20px;
+}
+
+.order-row {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 0 0 14px;
+}
+
+.order-row legend {
+  font-weight: 700;
+  padding-inline: 6px;
+}
+
+.order-fields {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.order-fields select {
+  min-width: 0;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+}
+
+.order-allowance {
+  max-width: 15rem;
+}
+
+.order-remove {
+  margin-top: 12px;
+}
+
+.order-form button:disabled {
+  opacity: .55;
+  cursor: default;
+}
+
+.order-section .field[hidden] {
+  display: none;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.order-section .table-scroll .info-table {
+  display: table;
+}
+
+@media (max-width: 760px) {
+  .order-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 420px) {
+  .order-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 .record-meta {
   display: flex;
   flex-wrap: wrap;

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tile and Flooring Purchase Worksheet | HomeCalc Tools</title>
+  <meta name="description" content="Measure several rooms, deduct fixed footprints, compare the carton cost of two flooring or tile products, and export the full material takeoff.">
+  <link rel="canonical" href="https://homecalc.xyz/tools/material-order/">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/styles.css?v=20261126-orders">
+  <script type="module" src="/assets/order-sheet.mjs?v=20261126-orders"></script>
+</head>
+<body>
+  <header class="topbar"><nav class="nav" aria-label="Main"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>HomeCalc Tools</span></a><div class="nav-links"><a href="/tools/">Tools</a><a href="/records/">Planning records</a><a href="/methodology/">Method</a><a href="/about/">About</a></div></nav></header>
+  <main class="shell">
+    <div class="record-head order-head">
+      <h1>Tile and flooring purchase worksheet</h1>
+      <p class="lead">Measure the area once, then compare two carton quotes for the same scope.</p>
+      <div class="button-row"><button type="button" class="secondary" data-example="tile-bath">Load bathroom example</button><button type="button" class="secondary" data-example="flooring-rooms">Load connected rooms example</button></div>
+      <noscript><p>This worksheet requires JavaScript. The <a href="/records/tile-order-record/">bathroom calculation</a> and <a href="/records/flooring-order-record/">flooring calculation</a> are available as text.</p></noscript>
+    </div>
+    <form id="order-form" class="order-form">
+      <div class="order-section">
+        <h2>Measure the surfaces</h2>
+        <p>Use feet with decimals. Split L-shaped areas into non-overlapping rectangles and deduct only footprints that will remain uncovered.</p>
+        <div id="order-zones"></div>
+        <button type="button" class="secondary" id="add-zone">Add area</button>
+      </div>
+      <div class="order-section">
+        <h2>Enter carton details</h2>
+        <div class="field order-allowance"><label for="allowance">Layout allowance (%)</label><input id="allowance" type="number" required min="0" max="100" step="any" value="10"></div>
+        <p>Use the carton label for each product. Compare alternatives with the same allowance, or run separate estimates if their layouts require different allowances.</p>
+        <div id="order-products"></div>
+        <button type="button" class="secondary" id="add-product">Compare another product</button>
+      </div>
+      <div class="button-row"><button type="submit">Calculate order</button></div>
+    </form>
+    <p id="order-status" role="status" aria-live="polite"></p>
+    <section id="order-results" class="order-section" aria-labelledby="result-heading" hidden>
+      <h2 id="result-heading" tabindex="-1">Order comparison</h2>
+      <p id="order-area"></p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="Product comparison">
+        <table class="info-table"><thead><tr><th scope="col">Product</th><th scope="col">Cartons</th><th scope="col">Purchased area</th><th scope="col">Extra after allowance</th><th scope="col">Material subtotal</th></tr></thead><tbody id="order-options"></tbody></table>
+      </div>
+      <div class="button-row"><button id="order-csv" type="button">Download CSV</button><button id="order-share" type="button" class="secondary">Copy estimate link</button></div>
+      <p class="note">The link includes the fields and notes entered here. Avoid adding names, addresses or other private information. The subtotal excludes tax, delivery, installation and accessories.</p>
+      <div class="field" id="share-field" hidden><label for="share-url">Estimate link</label><input id="share-url" type="url" readonly></div>
+    </section>
+    <section class="order-section">
+      <h2>Check the order before buying</h2>
+      <p>Record the quantity before cuts, the quantity including the layout allowance, and the area represented by whole cartons. Carton rounding may provide a repair reserve, depending on what is left at the end of the job. For quotes with different freight or return terms, compare those costs separately.</p>
+      <p>The <a href="/records/tile-order-record/">bathroom case</a> works through two carton sizes at a four-carton threshold. The <a href="/records/flooring-order-record/">flooring case</a> shows how measuring the hall and closet separately changes the order. See the <a href="/records/carton-quote-check/">carton quote checklist</a> for questions to ask a supplier.</p>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span>HomeCalc Tools</span><span><a href="/privacy/">Privacy</a><a href="/contact/">Contact</a><a href="/disclaimer/">Disclaimer</a></span></div></footer>
+</body>
+</html>
